@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 
 namespace iAcademicGenerator.DataAccess.Repositories
 {
-    class CareersRepository
+    public class CareersRepository
     {
+
     }
 }

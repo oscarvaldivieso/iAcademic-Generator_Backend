@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace iAcademicGenerator.DataAccess.Context
 {
-    class DB_iAcademicGeneratorContext
+    public class DB_iAcademicGeneratorContext
     {
     }
 }
