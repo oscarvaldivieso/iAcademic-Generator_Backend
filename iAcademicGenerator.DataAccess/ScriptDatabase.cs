@@ -1,22 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace iAcademicGenerator.DataAccess
 {
-    public interface IDbContext
+    public class ScriptDatabase
     {
-        IDbConnection CreateConnection();
-    }
 
+        #region Classes
 
-    public class iAcademicGeneratorContext 
-    {
-        
-
-
+        public static string SP_GetClasses = "SP.Gral_getClasses";
+        #endregion
     }
 }
