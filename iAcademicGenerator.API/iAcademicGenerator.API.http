@@ -1,0 +1,6 @@
+@iAcademicGenerator.API_HostAddress = http://localhost:5045
+
+GET {{iAcademicGenerator.API_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
