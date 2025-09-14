@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Data.SqlClient;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
@@ -15,8 +16,16 @@ namespace iAcademicGenerator.DataAccess
 
     public class iAcademicGeneratorContext 
     {
-        
+        public static string ConnectionString { get; set; } 
 
+        public iAcademicGeneratorContext() {
+        }
+
+        public static void BuildConnectionString(string connection)
+        {
+            var connectionStringBuilder = new SqlConnectionStringBuilder {  ConnectionString = connection };
+            ConnectionString = connectionStringBuilder.ConnectionString;
+        }
 
     }
 }
