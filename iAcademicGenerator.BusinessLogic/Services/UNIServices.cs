@@ -11,15 +11,17 @@ namespace iAcademicGenerator.BusinessLogic.Services
     public class UNIServices
     {
         private readonly CareersRepository _careersRepository;
+        private readonly CampusRepository _campusRepository;
 
-        public UNIServices(CareersRepository careersRepository)
+        public UNIServices(CareersRepository careersRepository, CampusRepository campusRepository)
         {
             _careersRepository = careersRepository;
+            _campusRepository = campusRepository;
         }
 
         #region Careers
         public ServiceResult ListCareers()
-        { 
+        {
             var result = new ServiceResult();
             try
             {
@@ -60,7 +62,7 @@ namespace iAcademicGenerator.BusinessLogic.Services
                     return result.Error(response);
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 return result.Error($"Unexpected error during career inserting: {ex.Message}");
             }
@@ -114,5 +116,11 @@ namespace iAcademicGenerator.BusinessLogic.Services
             }
         }
         #endregion
+
+        #region Campus
+        //Trabaja aqui
+        #endregion
+
+
     }
 }
