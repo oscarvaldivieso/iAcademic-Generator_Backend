@@ -1,5 +1,6 @@
-﻿using iAcademicGenerator.DataAccess;
-using iAcademicGenerator.DataAccess.Repositories;
+﻿using iAcademicGenerator.BusinessLogic.Services;
+using iAcademicGenerator.DataAccess;
+using iAcademicGenerator.DataAccess.Repositories.UNI;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Identity.Client;
 using System;
@@ -14,16 +15,17 @@ namespace iAcademicGenerator.BusinessLogic
     {
         public static void DataAccess(this IServiceCollection services, string connectionString)
         {
-            iAcademicGenerator.DataAccess.iAcademicGeneratorContext.BuildConnectionString(connectionString);
-
-            services.AddScoped<CareersRepository>();
-
+            // Configura la cadena de conexión del context
             iAcademicGeneratorContext.BuildConnectionString(connectionString);
+
+            // Repositorios
+            services.AddScoped<CareersRepository>();
 
         }
 
         public static void BusinessLogic(this IServiceCollection services)
         {
+            services.AddScoped<UNIServices>();
         }
 
 
