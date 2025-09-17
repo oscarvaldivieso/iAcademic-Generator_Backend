@@ -1,18 +1,16 @@
-﻿using AutoMapper;
-using iAcademicGenerator.BusinessLogic.Services;
+﻿using iAcademicGenerator.BusinessLogic.Services;
 using iAcademicGenerator.Models.Models;
 using Microsoft.AspNetCore.Mvc;
-using iAcademicGenerator.Models.Models;
 
 namespace iAcademicGenerator.API.Controllers.UNI
 {
     [Route("[controller]")]
     [ApiController]
-    public class CareersController : Controller
+    public class ModalitiesController : Controller
     {
         private readonly UNIServices _UNIservices;
 
-        public CareersController(UNIServices uniServices)
+        public ModalitiesController(UNIServices uniServices)
         {
             _UNIservices = uniServices ?? throw new ArgumentNullException(nameof(uniServices));
         }
@@ -23,7 +21,7 @@ namespace iAcademicGenerator.API.Controllers.UNI
         [HttpGet("list")]
         public IActionResult List()
         {
-            var result = _UNIservices.ListCareers();
+            var result = _UNIservices.ListModalities();
 
             if (result.Success)
             {
@@ -37,12 +35,12 @@ namespace iAcademicGenerator.API.Controllers.UNI
 
         //This endpoint insert a new career
         [HttpPost("create")]
-        public IActionResult Create([FromBody] CareersDTO career)
+        public IActionResult Create([FromBody] ModalitiesDTO modality)
         {
 
             try
             {
-                var result = _UNIservices.CareerInsert(career);
+                var result = _UNIservices.ModalityInsert(modality);
 
                 if (result.Success)
                 {
@@ -66,12 +64,12 @@ namespace iAcademicGenerator.API.Controllers.UNI
 
 
         [HttpPost("update")]
-        public IActionResult Update([FromBody] CareersDTO career)
+        public IActionResult Update([FromBody] ModalitiesDTO modality)
         {
 
             try
             {
-                var result = _UNIservices.CareerUpdate(career);
+                var result = _UNIservices.ModalityUpdate(modality);
 
                 if (result.Success)
                 {
@@ -94,9 +92,9 @@ namespace iAcademicGenerator.API.Controllers.UNI
         }
 
         [HttpDelete("delete")]
-        public IActionResult Delete(string carCodigo)
+        public IActionResult Delete(string modCodigo)
         {
-            var result = _UNIservices.CareerDelete(carCodigo);
+            var result = _UNIservices.ModalityDelete(modCodigo);
 
             if (result.Success)
                 return Ok(result);

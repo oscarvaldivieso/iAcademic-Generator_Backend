@@ -16,5 +16,13 @@ namespace iAcademicGenerator.DataAccess
         public static string SP_CareerUpdate = "[UNI].[SP_Career_Update]";
         public static string SP_CareerDelete = "[UNI].[SP_Career_Delete]";
         #endregion
+
+
+        #region Modalities
+        public static string SP_ModalitiesList = "[UNI].[SP_Modalities_List]";
+        public static string SP_ModalityInsert = "[UNI].[SP_Modality_Insert]";
+        public static string SP_ModalityUpdate = "[UNI].[SP_Modality_Update]";
+        public static string SP_ModalityDelete = "[UNI].[SP_Modality_Delete]";
+        #endregion
     }
 }
