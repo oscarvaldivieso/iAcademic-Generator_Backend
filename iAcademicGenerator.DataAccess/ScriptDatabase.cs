@@ -11,10 +11,10 @@ namespace iAcademicGenerator.DataAccess
 
         #region Classes
 
-        public static string SP_CareersList = "[UNI].[SP_CareersList]";
-        public static string SP_CareerInsert = "[UNI].[SP_CareerInsert]";
-        public static string SP_CareerUpdate = "[UNI].[SP_CareerUpdate]";
-        public static string SP_CareerDelete = "[UNI].[SP_CareerDelete]";
+        public static string SP_CareersList = "[UNI].[SP_Careers_List]";
+        public static string SP_CareerInsert = "[UNI].[SP_Career_Insert]";
+        public static string SP_CareerUpdate = "[UNI].[SP_Career_Update]";
+        public static string SP_CareerDelete = "[UNI].[SP_Career_Delete]";
         #endregion
     }
 }
