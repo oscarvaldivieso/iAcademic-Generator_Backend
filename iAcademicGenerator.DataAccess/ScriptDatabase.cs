@@ -24,5 +24,13 @@ namespace iAcademicGenerator.DataAccess
         public static string SP_ModalityUpdate = "[UNI].[SP_Modality_Update]";
         public static string SP_ModalityDelete = "[UNI].[SP_Modality_Delete]";
         #endregion
+
+        #region Periods
+        public static string SP_PeriodsList = "[UNI].[SP_Periods_List]";
+        public static string SP_PeriodInsert = "[UNI].[SP_Period_Insert]";
+        public static string SP_PeriodUpdate = "[UNI].[SP_Period_Update]";
+        public static string SP_PeriodDelete = "[UNI].[SP_Period_Delete]";
+        #endregion
+
     }
 }
