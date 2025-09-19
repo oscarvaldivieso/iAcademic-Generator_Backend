@@ -13,12 +13,14 @@ namespace iAcademicGenerator.BusinessLogic.Services
         private readonly CareersRepository _careersRepository;
         private readonly CampusRepository _campusRepository;
         private readonly ModalitiesRepository _modalitiesRepository;
+        private readonly PeriodsRepository _periodsRepository;
 
-        public UNIServices(CareersRepository careersRepository, CampusRepository campusRepository, ModalitiesRepository modalitiesRepository)
+        public UNIServices(CareersRepository careersRepository, CampusRepository campusRepository, ModalitiesRepository modalitiesRepository, PeriodsRepository periodsRepository)
         {
             _careersRepository = careersRepository;
             _campusRepository = campusRepository;
             _modalitiesRepository = modalitiesRepository;
+            _periodsRepository = periodsRepository;
         }
 
         #region Careers
@@ -221,6 +223,91 @@ namespace iAcademicGenerator.BusinessLogic.Services
             }
         }
 
+        #endregion
+
+        #region Periods
+        public ServiceResult ListPeriods()
+        {
+            var result = new ServiceResult();
+            try
+            {
+                var response = _periodsRepository.List();
+                return result.Ok(response);
+            }
+            catch (Exception ex)
+            {
+                return result.Error(ex.Message);
+            }
+        }
+
+        public ServiceResult PeriodInsert(PeriodsDTO period)
+        {
+            var result = new ServiceResult();
+            try
+            {
+                // Validaciones básicas antes de llamar al repository
+                if (period == null)
+                {
+                    return result.Error("Period data is required");
+                }
+                if (string.IsNullOrWhiteSpace(period.per_codigo))
+                {
+                    return result.Error("Period code is required");
+                }
+                var response = _periodsRepository.PeriodInsert(period);
+                if (response.CodeStatus == 1)
+                {
+                    return result.Ok(response);
+                }
+                else
+                {
+                    return result.Error(response);
+                }
+            }
+            catch (Exception ex)
+            {
+                return result.Error($"Unexpected error during period inserting: {ex.Message}");
+            }
+        }
+
+        public ServiceResult PeriodUpdate(PeriodsDTO period)
+        {
+            var result = new ServiceResult();
+            try
+            {
+                if (period == null)
+                    return result.Error("Period data is required");
+                if (string.IsNullOrWhiteSpace(period.per_codigo))
+                    return result.Error("Period code is required for update");
+                var response = _periodsRepository.PeriodUpdate(period);
+                if (response.CodeStatus == 1)
+                    return result.Ok(response);
+                else
+                    return result.Error(response);
+            }
+            catch (Exception ex)
+            {
+                return result.Error($"Unexpected error during period updating: {ex.Message}");
+            }
+        }
+
+        public ServiceResult PeriodDelete(string perCodigo)
+        {
+            var result = new ServiceResult();
+            if (string.IsNullOrWhiteSpace(perCodigo))
+                return result.Error("Period code is required for deletion");
+            try
+            {
+                var response = _periodsRepository.PeriodDelete(perCodigo);
+                return response.CodeStatus == 1
+                    ? result.Ok(response)
+                    : result.Error(response);
+            }
+            catch (Exception ex)
+            {
+                return result.Error($"Unexpected error during period deletion: {ex.Message}");
+            }
+        }
         #endregion
 
 
