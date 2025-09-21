@@ -1,45 +1,43 @@
-﻿using Dapper;
+using Dapper;
 using iAcademicGenerator.Models.Models;
 using Microsoft.Data.SqlClient;
 using System.Data;
 
 namespace iAcademicGenerator.DataAccess.Repositories.UNI
 {
-    public class CampusRepository
+    public class RolesRepository
     {
-        public IEnumerable<CampusDTO> List()
+        public IEnumerable<RolesDTO> List()
         {
             using var db = new SqlConnection(iAcademicGeneratorContext.ConnectionString);
-            var result = db.Query<CampusDTO>(
-                ScriptDatabase.SP_CampusList,
+            var result = db.Query<RolesDTO>(
+                ScriptDatabase.SP_RolList,
                 commandType: CommandType.StoredProcedure
             ).ToList();
 
             return result;
         }
 
-        public RequestStatus CampusInsert(CampusDTO campus)
+        public RequestStatus RolesInsert(RolesDTO rol)
         {
             var parameter = new DynamicParameters();
 
-            parameter.Add("@cam_codigo", campus.cam_codigo);
-            parameter.Add("@cam_nombre", campus.cam_nombre);
-            parameter.Add("@cam_ciudad", campus.cam_ciudad);
-            parameter.Add("@active", campus.active);
-            parameter.Add("@created_at", campus.created_at);
-            parameter.Add("@updated_at", campus.updated_at);
-            parameter.Add("@created_by", campus.created_by);
-            parameter.Add("@updated_by", campus.updated_by);
+            parameter.Add("@rol_nombre", rol.rol_nombre);
+            parameter.Add("@active", rol.active);
+            parameter.Add("@create_at", rol.create_at);
+            parameter.Add("@update_at", rol.update_at);
+            parameter.Add("@create_by", rol.create_by);
+            parameter.Add("@update_by", rol.update_by);
 
             try
             {
                 using var db = new SqlConnection(iAcademicGeneratorContext.ConnectionString);
-                db.Execute(ScriptDatabase.SP_CampusInsert, parameter, commandType: CommandType.StoredProcedure);
+                db.Execute(ScriptDatabase.SP_RolInsert, parameter, commandType: CommandType.StoredProcedure);
 
                 return new RequestStatus
                 {
                     CodeStatus = 1,
-                    MessageStatus = "Campus inserted successfully"
+                    MessageStatus = "Role inserted successfully"
                 };
             }
             catch (Exception ex)
@@ -52,22 +50,21 @@ namespace iAcademicGenerator.DataAccess.Repositories.UNI
             }
         }
 
-        public RequestStatus CampusUpdate(CampusDTO campus)
+        public RequestStatus RolesUpdate(RolesDTO rol)
         {
             var parameter = new DynamicParameters();
 
-            parameter.Add("@cam_codigo", campus.cam_codigo);
-            parameter.Add("@cam_nombre", campus.cam_nombre);
-            parameter.Add("@cam_ciudad", campus.cam_ciudad);
-            parameter.Add("@active", campus.active);
-            parameter.Add("@updated_at", campus.updated_at);
-            parameter.Add("@updated_by", campus.updated_by);
+            parameter.Add("@rol_codigo", rol.rol_codigo);
+            parameter.Add("@rol_nombre", rol.rol_nombre);
+            parameter.Add("@active", rol.active);
+            parameter.Add("@update_at", rol.update_at);
+            parameter.Add("@update_by", rol.update_by);
 
             try
             {
                 using var db = new SqlConnection(iAcademicGeneratorContext.ConnectionString);
                 var result = db.QueryFirstOrDefault<RequestStatus>(
-                    ScriptDatabase.SP_CampusUpdate,
+                    ScriptDatabase.SP_RolUpdate,
                     parameter,
                     commandType: CommandType.StoredProcedure
                 );
@@ -88,16 +85,16 @@ namespace iAcademicGenerator.DataAccess.Repositories.UNI
             }
         }
 
-        public RequestStatus CampusDelete(string cam_codigo)
+        public RequestStatus RolesDelete(string rol_codigo)
         {
             var parameter = new DynamicParameters();
-            parameter.Add("@cam_codigo", cam_codigo);
+            parameter.Add("@rol_codigo", rol_codigo);
 
             try
             {
                 using var db = new SqlConnection(iAcademicGeneratorContext.ConnectionString);
                 var result = db.QueryFirstOrDefault<RequestStatus>(
-                    ScriptDatabase.SP_CampusDelete,
+                    ScriptDatabase.SP_RolDelete,
                     parameter,
                     commandType: CommandType.StoredProcedure
                 );
@@ -119,4 +116,3 @@ namespace iAcademicGenerator.DataAccess.Repositories.UNI
         }
     }
 }
-

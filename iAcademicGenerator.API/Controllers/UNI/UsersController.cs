@@ -1,25 +1,25 @@
-﻿using iAcademicGenerator.BusinessLogic.Services;
+using iAcademicGenerator.BusinessLogic.Services;
 using iAcademicGenerator.Models.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace iAcademicGenerator.API.Controllers.UNI
+
 {
     [Route("[controller]")]
     [ApiController]
-    public class CampusController : Controller
+    public class UserController : Controller
     {
         private readonly UNIServices _UNIservices;
 
-        public CampusController(UNIServices uniServices)
+        public UserController(UNIServices uniServices)
         {
             _UNIservices = uniServices ?? throw new ArgumentNullException(nameof(uniServices));
         }
 
-        
-        [HttpGet("list-campus")]
+        [HttpGet("list-users")]
         public IActionResult List()
         {
-            var result = _UNIservices.ListCampus();
+            var result = _UNIservices.ListUsers();
 
             if (result.Success)
             {
@@ -31,13 +31,41 @@ namespace iAcademicGenerator.API.Controllers.UNI
             }
         }
 
-        [HttpPost("create-campus")]
-        public IActionResult Create([FromBody] CampusDTO campus)
+        [HttpPost("create-user")]
+        public IActionResult Create([FromBody] UserDTO user)
         {
 
             try
             {
-                var result = _UNIservices.CampusInsert(campus);
+                var result = _UNIservices.UsersInsert(user);
+
+                if (result.Success)
+                {
+                    return Ok(result);
+                }
+                else
+                {
+                    return BadRequest(result);
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new
+                {
+                    Success = false,
+                    Message = "Internal server error",
+                    Details = ex.Message
+                });
+            }
+        }
+
+        [HttpPost("update-user")]
+        public IActionResult Update([FromBody] UserDTO user)
+        {
+
+            try
+            {
+                var result = _UNIservices.UsersUpdate(user);
 
                 if (result.Success)
                 {
@@ -59,38 +87,10 @@ namespace iAcademicGenerator.API.Controllers.UNI
             }
         }
         
-        [HttpPost("update-campus")]
-        public IActionResult Update([FromBody] CampusDTO campus)
+        [HttpDelete("delete-user")]
+        public IActionResult Delete(string usuCodigo)
         {
-
-            try
-            {
-                var result = _UNIservices.CampusUpdate(campus);
-
-                if (result.Success)
-                {
-                    return Ok(result);
-                }
-                else
-                {
-                    return BadRequest(result);
-                }
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new
-                {
-                    Success = false,
-                    Message = "Internal server error",
-                    Details = ex.Message
-                });
-            }
-        }
-        
-        [HttpDelete("delete-campus")]
-        public IActionResult Delete(string campusCodigo)
-        {
-            var result = _UNIservices.CampusDelete(campusCodigo);
+            var result = _UNIservices.UsersDelete(usuCodigo);
 
             if (result.Success)
                 return Ok(result);
@@ -99,3 +99,4 @@ namespace iAcademicGenerator.API.Controllers.UNI
         }
     }
 }
+        

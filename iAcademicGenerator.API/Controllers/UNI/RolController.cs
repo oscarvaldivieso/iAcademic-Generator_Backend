@@ -1,25 +1,26 @@
-﻿using iAcademicGenerator.BusinessLogic.Services;
+using iAcademicGenerator.BusinessLogic.Services;
 using iAcademicGenerator.Models.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace iAcademicGenerator.API.Controllers.UNI
+
 {
     [Route("[controller]")]
     [ApiController]
-    public class CampusController : Controller
+    public class RolController : Controller
     {
         private readonly UNIServices _UNIservices;
 
-        public CampusController(UNIServices uniServices)
+        public RolController(UNIServices uniServices)
         {
             _UNIservices = uniServices ?? throw new ArgumentNullException(nameof(uniServices));
         }
 
         
-        [HttpGet("list-campus")]
+        [HttpGet("list-rol")]
         public IActionResult List()
         {
-            var result = _UNIservices.ListCampus();
+            var result = _UNIservices.ListRol();
 
             if (result.Success)
             {
@@ -30,14 +31,14 @@ namespace iAcademicGenerator.API.Controllers.UNI
                 return BadRequest(result);
             }
         }
-
-        [HttpPost("create-campus")]
-        public IActionResult Create([FromBody] CampusDTO campus)
+        
+        [HttpPost("create-rol")]
+        public IActionResult Create([FromBody] RolDTO rol)
         {
 
             try
             {
-                var result = _UNIservices.CampusInsert(campus);
+                var result = _UNIservices.RolInsert(rol);
 
                 if (result.Success)
                 {
@@ -59,13 +60,13 @@ namespace iAcademicGenerator.API.Controllers.UNI
             }
         }
         
-        [HttpPost("update-campus")]
-        public IActionResult Update([FromBody] CampusDTO campus)
+        [HttpPost("update-rol")]
+        public IActionResult Update([FromBody] RolDTO rol)
         {
 
             try
             {
-                var result = _UNIservices.CampusUpdate(campus);
+                var result = _UNIservices.RolUpdate(rol);
 
                 if (result.Success)
                 {
@@ -87,10 +88,10 @@ namespace iAcademicGenerator.API.Controllers.UNI
             }
         }
         
-        [HttpDelete("delete-campus")]
-        public IActionResult Delete(string campusCodigo)
+        [HttpDelete("delete-rol")]
+        public IActionResult Delete(string rolCodigo)
         {
-            var result = _UNIservices.CampusDelete(campusCodigo);
+            var result = _UNIservices.RolDelete(rolCodigo);
 
             if (result.Success)
                 return Ok(result);

@@ -1,45 +1,40 @@
-﻿using Dapper;
+using Dapper;
 using iAcademicGenerator.Models.Models;
 using Microsoft.Data.SqlClient;
 using System.Data;
 
 namespace iAcademicGenerator.DataAccess.Repositories.UNI
 {
-    public class CampusRepository
+    public class RolRepository
     {
-        public IEnumerable<CampusDTO> List()
+        public IEnumerable<RolDTO> List()
         {
             using var db = new SqlConnection(iAcademicGeneratorContext.ConnectionString);
-            var result = db.Query<CampusDTO>(
-                ScriptDatabase.SP_CampusList,
+            var result = db.Query<RolDTO>(
+                ScriptDatabase.SP_UserRolesList,
                 commandType: CommandType.StoredProcedure
             ).ToList();
 
             return result;
         }
 
-        public RequestStatus CampusInsert(CampusDTO campus)
+        public RequestStatus RolInsert(RolDTO userRole)
         {
             var parameter = new DynamicParameters();
 
-            parameter.Add("@cam_codigo", campus.cam_codigo);
-            parameter.Add("@cam_nombre", campus.cam_nombre);
-            parameter.Add("@cam_ciudad", campus.cam_ciudad);
-            parameter.Add("@active", campus.active);
-            parameter.Add("@created_at", campus.created_at);
-            parameter.Add("@updated_at", campus.updated_at);
-            parameter.Add("@created_by", campus.created_by);
-            parameter.Add("@updated_by", campus.updated_by);
+            parameter.Add("@usu_codigo", userRole.usu_codigo);
+            parameter.Add("@rol_codigo", userRole.rol_codigo);
+            parameter.Add("@active", userRole.active);
 
             try
             {
                 using var db = new SqlConnection(iAcademicGeneratorContext.ConnectionString);
-                db.Execute(ScriptDatabase.SP_CampusInsert, parameter, commandType: CommandType.StoredProcedure);
+                db.Execute(ScriptDatabase.SP_UserRoleInsert, parameter, commandType: CommandType.StoredProcedure);
 
                 return new RequestStatus
                 {
                     CodeStatus = 1,
-                    MessageStatus = "Campus inserted successfully"
+                    MessageStatus = "User role inserted successfully"
                 };
             }
             catch (Exception ex)
@@ -52,22 +47,19 @@ namespace iAcademicGenerator.DataAccess.Repositories.UNI
             }
         }
 
-        public RequestStatus CampusUpdate(CampusDTO campus)
+        public RequestStatus RolUpdate(RolDTO userRole)
         {
             var parameter = new DynamicParameters();
 
-            parameter.Add("@cam_codigo", campus.cam_codigo);
-            parameter.Add("@cam_nombre", campus.cam_nombre);
-            parameter.Add("@cam_ciudad", campus.cam_ciudad);
-            parameter.Add("@active", campus.active);
-            parameter.Add("@updated_at", campus.updated_at);
-            parameter.Add("@updated_by", campus.updated_by);
+            parameter.Add("@usu_codigo", userRole.usu_codigo);
+            parameter.Add("@rol_codigo", userRole.rol_codigo);
+            parameter.Add("@active", userRole.active);
 
             try
             {
                 using var db = new SqlConnection(iAcademicGeneratorContext.ConnectionString);
                 var result = db.QueryFirstOrDefault<RequestStatus>(
-                    ScriptDatabase.SP_CampusUpdate,
+                    ScriptDatabase.SP_UserRoleUpdate,
                     parameter,
                     commandType: CommandType.StoredProcedure
                 );
@@ -88,16 +80,16 @@ namespace iAcademicGenerator.DataAccess.Repositories.UNI
             }
         }
 
-        public RequestStatus CampusDelete(string cam_codigo)
+        public RequestStatus RolDelete( string rol_codigo)
         {
             var parameter = new DynamicParameters();
-            parameter.Add("@cam_codigo", cam_codigo);
+            parameter.Add("@rol_codigo", rol_codigo);
 
             try
             {
                 using var db = new SqlConnection(iAcademicGeneratorContext.ConnectionString);
                 var result = db.QueryFirstOrDefault<RequestStatus>(
-                    ScriptDatabase.SP_CampusDelete,
+                    ScriptDatabase.SP_UserRoleDelete,
                     parameter,
                     commandType: CommandType.StoredProcedure
                 );
@@ -119,4 +111,3 @@ namespace iAcademicGenerator.DataAccess.Repositories.UNI
         }
     }
 }
-
