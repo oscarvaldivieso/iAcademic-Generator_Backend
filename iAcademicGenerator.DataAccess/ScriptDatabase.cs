@@ -11,10 +11,10 @@ namespace iAcademicGenerator.DataAccess
 
         #region Classes
 
-        public static string SP_CareersList = "[UNI].[SP_CareersList]";
-        public static string SP_CareerInsert = "[UNI].[SP_CareerInsert]";
-        public static string SP_CareerUpdate = "[UNI].[SP_CareerUpdate]";
-        public static string SP_CareerDelete = "[UNI].[SP_CareerDelete]";
+        public static string SP_CareersList = "[UNI].[SP_Careers_List]";
+        public static string SP_CareerInsert = "[UNI].[SP_Career_Insert]";
+        public static string SP_CareerUpdate = "[UNI].[SP_Career_Update]";
+        public static string SP_CareerDelete = "[UNI].[SP_Career_Delete]";
         #endregion
         
         public static string SP_UsersList = "sp_Users_List";
@@ -36,5 +36,21 @@ namespace iAcademicGenerator.DataAccess
         public const string SP_CampusInsert = "UNI.SP_CampusInsert";
         public const string SP_CampusUpdate = "UNI.SP_CampusUpdate";
         public const string SP_CampusDelete = "UNI.SP_CampusDelete";
+
+
+        #region Modalities
+        public static string SP_ModalitiesList = "[UNI].[SP_Modalities_List]";
+        public static string SP_ModalityInsert = "[UNI].[SP_Modality_Insert]";
+        public static string SP_ModalityUpdate = "[UNI].[SP_Modality_Update]";
+        public static string SP_ModalityDelete = "[UNI].[SP_Modality_Delete]";
+        #endregion
+
+        #region Periods
+        public static string SP_PeriodsList = "[UNI].[SP_Periods_List]";
+        public static string SP_PeriodInsert = "[UNI].[SP_Period_Insert]";
+        public static string SP_PeriodUpdate = "[UNI].[SP_Period_Update]";
+        public static string SP_PeriodDelete = "[UNI].[SP_Period_Delete]";
+        #endregion
+
     }
 }

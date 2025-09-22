@@ -12,19 +12,18 @@ namespace iAcademicGenerator.BusinessLogic.Services
     {
         private readonly CareersRepository _careersRepository;
         private readonly CampusRepository _campusRepository;
-        private readonly UsersRepository _usersRepository;
-        private readonly RolRepository _rolRepository;
-        private readonly RolesRepository _rolesRepository;
-        public UNIServices(CareersRepository careersRepository, CampusRepository campusRepository, UsersRepository usersRepository, 
-            RolRepository rolRepository,RolesRepository rolesRepository)
+        private readonly ModalitiesRepository _modalitiesRepository;
+        private readonly PeriodsRepository _periodsRepository;
+
+        public UNIServices(CareersRepository careersRepository, CampusRepository campusRepository, ModalitiesRepository modalitiesRepository, PeriodsRepository periodsRepository)
         {
             _careersRepository = careersRepository;
             _campusRepository = campusRepository;
-            _usersRepository = usersRepository;
-            _rolRepository = rolRepository;
-            _rolesRepository = rolesRepository;
+            _modalitiesRepository = modalitiesRepository;
+            _periodsRepository = periodsRepository;
         }
 
+        #region Careers
         public ServiceResult ListCareers()
         {
             var result = new ServiceResult();
@@ -98,7 +97,8 @@ namespace iAcademicGenerator.BusinessLogic.Services
                 return result.Error($"Unexpected error during career updating: {ex.Message}");
             }
         }
-        
+
+
         public ServiceResult CareerDelete(string carCodigo)
         {
             var result = new ServiceResult();
@@ -119,13 +119,20 @@ namespace iAcademicGenerator.BusinessLogic.Services
                 return result.Error($"Unexpected error during career deletion: {ex.Message}");
             }
         }
-        
-        public ServiceResult ListUsers()
+        #endregion
+
+        #region Campus
+        //Trabaja aqui
+        #endregion
+
+
+        #region Modalities
+        public ServiceResult ListModalities()
         {
             var result = new ServiceResult();
             try
             {
-                var response = _usersRepository.List();
+                var response = _modalitiesRepository.List();
                 return result.Ok(response);
             }
             catch (Exception ex)
@@ -133,23 +140,25 @@ namespace iAcademicGenerator.BusinessLogic.Services
                 return result.Error(ex.Message);
             }
         }
-        public ServiceResult UsersInsert(UserDTO user)
+
+        public ServiceResult ModalityInsert(ModalitiesDTO modality)
         {
             var result = new ServiceResult();
 
             try
             {
-                if (user == null)
+                // Validaciones básicas antes de llamar al repository
+                if (modality == null)
                 {
-                    return result.Error("User data is required");
+                    return result.Error("Modality data is required");
                 }
 
-                if (string.IsNullOrWhiteSpace(user.usu_codigo))
+                if (string.IsNullOrWhiteSpace(modality.mod_codigo))
                 {
-                    return result.Error("User code is required");
+                    return result.Error("Career code is required");
                 }
 
-                var response = _usersRepository.UsersInsert(user);
+                var response = _modalitiesRepository.ModalityInsert(modality);
 
                 if (response.CodeStatus == 1)
                 {
@@ -162,22 +171,24 @@ namespace iAcademicGenerator.BusinessLogic.Services
             }
             catch (Exception ex)
             {
-                return result.Error($"Unexpected error during user inserting: {ex.Message}");
+                return result.Error($"Unexpected error during modality inserting: {ex.Message}");
             }
         }
-        public ServiceResult UsersUpdate(UserDTO user)
+
+
+        public ServiceResult ModalityUpdate(ModalitiesDTO modality)
         {
             var result = new ServiceResult();
 
             try
             {
-                if (user == null)
-                    return result.Error("User data is required");
+                if (modality == null)
+                    return result.Error("Modality data is required");
 
-                if (string.IsNullOrWhiteSpace(user.usu_codigo))
-                    return result.Error("User code is required for update");
+                if (string.IsNullOrWhiteSpace(modality.mod_codigo))
+                    return result.Error("Modality code is required for update");
 
-                var response = _usersRepository.UsersUpdate(user);
+                var response = _modalitiesRepository.ModalityUpdate(modality);
 
                 if (response.CodeStatus == 1)
                     return result.Ok(response);
@@ -186,19 +197,21 @@ namespace iAcademicGenerator.BusinessLogic.Services
             }
             catch (Exception ex)
             {
-                return result.Error($"Unexpected error during user updating: {ex.Message}");
+                return result.Error($"Unexpected error during modality updating: {ex.Message}");
             }
         }
-        public ServiceResult UsersDelete(string usuCodigo)
+
+
+        public ServiceResult ModalityDelete(string modCodigo)
         {
             var result = new ServiceResult();
 
-            if (string.IsNullOrWhiteSpace(usuCodigo))
-                return result.Error("User code is required for deletion");
+            if (string.IsNullOrWhiteSpace(modCodigo))
+                return result.Error("Modality code is required for deletion");
 
             try
             {
-                var response = _usersRepository.UsersDelete(usuCodigo);
+                var response = _modalitiesRepository.ModalityDelete(modCodigo);
 
                 return response.CodeStatus == 1
                     ? result.Ok(response)
@@ -206,16 +219,19 @@ namespace iAcademicGenerator.BusinessLogic.Services
             }
             catch (Exception ex)
             {
-                return result.Error($"Unexpected error during user deletion: {ex.Message}");
+                return result.Error($"Unexpected error during modality deletion: {ex.Message}");
             }
         }
 
-        public ServiceResult ListRol()
+        #endregion
+
+        #region Periods
+        public ServiceResult ListPeriods()
         {
             var result = new ServiceResult();
             try
             {
-                var response = _rolRepository.List();
+                var response = _periodsRepository.List();
                 return result.Ok(response);
             }
             catch (Exception ex)
@@ -223,24 +239,22 @@ namespace iAcademicGenerator.BusinessLogic.Services
                 return result.Error(ex.Message);
             }
         }
-        public ServiceResult RolInsert(RolDTO rol)
+
+        public ServiceResult PeriodInsert(PeriodsDTO period)
         {
             var result = new ServiceResult();
-
             try
             {
-                if (rol == null)
+                // Validaciones básicas antes de llamar al repository
+                if (period == null)
                 {
-                    return result.Error("Rol data is required");
+                    return result.Error("Period data is required");
                 }
-
-                if (string.IsNullOrWhiteSpace(rol.rol_codigo))
+                if (string.IsNullOrWhiteSpace(period.per_codigo))
                 {
-                    return result.Error("Rol code is required");
+                    return result.Error("Period code is required");
                 }
-
-                var response = _rolRepository.RolInsert(rol);
-
+                var response = _periodsRepository.PeriodInsert(period);
                 if (response.CodeStatus == 1)
                 {
                     return result.Ok(response);
@@ -252,24 +266,20 @@ namespace iAcademicGenerator.BusinessLogic.Services
             }
             catch (Exception ex)
             {
-                return result.Error($"Unexpected error during rol inserting: {ex.Message}");
+                return result.Error($"Unexpected error during period inserting: {ex.Message}");
             }
         }
-        
-        public ServiceResult RolUpdate(RolDTO rol)
+
+        public ServiceResult PeriodUpdate(PeriodsDTO period)
         {
             var result = new ServiceResult();
-
             try
             {
-                if (rol == null)
-                    return result.Error("Rol data is required");
-
-                if (string.IsNullOrWhiteSpace(rol.rol_codigo))
-                    return result.Error("Rol code is required for update");
-
-                var response = _rolRepository.RolUpdate(rol);
-
+                if (period == null)
+                    return result.Error("Period data is required");
+                if (string.IsNullOrWhiteSpace(period.per_codigo))
+                    return result.Error("Period code is required for update");
+                var response = _periodsRepository.PeriodUpdate(period);
                 if (response.CodeStatus == 1)
                     return result.Ok(response);
                 else
@@ -277,210 +287,29 @@ namespace iAcademicGenerator.BusinessLogic.Services
             }
             catch (Exception ex)
             {
-                return result.Error($"Unexpected error during rol updating: {ex.Message}");
+                return result.Error($"Unexpected error during period updating: {ex.Message}");
             }
         }
-        public ServiceResult RolDelete(string rolCodigo)
+
+        public ServiceResult PeriodDelete(string perCodigo)
         {
             var result = new ServiceResult();
-
-            if (string.IsNullOrWhiteSpace(rolCodigo))
-                return result.Error("Rol code is required for deletion");
-
+            if (string.IsNullOrWhiteSpace(perCodigo))
+                return result.Error("Period code is required for deletion");
             try
             {
-                var response = _rolRepository.RolDelete(rolCodigo);
-
+                var response = _periodsRepository.PeriodDelete(perCodigo);
                 return response.CodeStatus == 1
                     ? result.Ok(response)
                     : result.Error(response);
             }
             catch (Exception ex)
             {
-                return result.Error($"Unexpected error during rol deletion: {ex.Message}");
+                return result.Error($"Unexpected error during period deletion: {ex.Message}");
             }
         }
-        public ServiceResult ListRoles()
-        {
-            var result = new ServiceResult();
-            try
-            {
-                var response = _rolesRepository.List();
-                return result.Ok(response);
-            }
-            catch (Exception ex)
-            {
-                return result.Error(ex.Message);
-            }
-        }
-        public ServiceResult RolesInsert(RolesDTO roles)
-        {
-            var result = new ServiceResult();
+        #endregion
 
-            try
-            {
-                if (roles == null)
-                {
-                    return result.Error("Rol data is required");
-                }
 
-                if (string.IsNullOrWhiteSpace(roles.rol_codigo))
-                {
-                    return result.Error("Rol code is required");
-                }
-
-                var response = _rolesRepository.RolesInsert(roles);
-
-                if (response.CodeStatus == 1)
-                {
-                    return result.Ok(response);
-                }
-                else
-                {
-                    return result.Error(response);
-                }
-            }
-            catch (Exception ex)
-            {
-                return result.Error($"Unexpected error during rol inserting: {ex.Message}");
-            }
-        }
-        
-        public ServiceResult RolesUpdate(RolesDTO roles)
-        {
-            var result = new ServiceResult();
-
-            try
-            {
-                if (roles == null)
-                    return result.Error("Rol data is required");
-
-                if (string.IsNullOrWhiteSpace(roles.rol_codigo))
-                    return result.Error("Rol code is required for update");
-
-                var response = _rolesRepository.RolesUpdate(roles);
-
-                if (response.CodeStatus == 1)
-                    return result.Ok(response);
-                else
-                    return result.Error(response);
-            }
-            catch (Exception ex)
-            {
-                return result.Error($"Unexpected error during rol updating: {ex.Message}");
-            }
-        }
-        
-        public ServiceResult RolesDelete(string rolesCodigo)
-        {
-            var result = new ServiceResult();
-
-            if (string.IsNullOrWhiteSpace(rolesCodigo))
-                return result.Error("Rol code is required for deletion");
-
-            try
-            {
-                var response = _rolesRepository.RolesDelete(rolesCodigo);
-
-                return response.CodeStatus == 1
-                    ? result.Ok(response)
-                    : result.Error(response);
-            }
-            catch (Exception ex)
-            {
-                return result.Error($"Unexpected error during rol deletion: {ex.Message}");
-            }
-        }
-        
-        public ServiceResult ListCampus()
-        {
-            var result = new ServiceResult();
-            try
-            {
-                var response = _campusRepository.List();
-                return result.Ok(response);
-            }
-            catch (Exception ex)
-            {
-                return result.Error(ex.Message);
-            }
-        }
-        public ServiceResult CampusInsert(CampusDTO campus)
-        {
-            var result = new ServiceResult();
-
-            try
-            {
-                if (campus == null)
-                {
-                    return result.Error("Rol data is required");
-                }
-
-                if (string.IsNullOrWhiteSpace(campus.cam_codigo))
-                {
-                    return result.Error("Rol code is required");
-                }
-
-                var response = _campusRepository.CampusInsert(campus);
-
-                if (response.CodeStatus == 1)
-                {
-                    return result.Ok(response);
-                }
-                else
-                {
-                    return result.Error(response);
-                }
-            }
-            catch (Exception ex)
-            {
-                return result.Error($"Unexpected error during rol inserting: {ex.Message}");
-            }
-        }
-        public ServiceResult CampusUpdate(CampusDTO campus)
-        {
-            var result = new ServiceResult();
-
-            try
-            {
-                if (campus == null)
-                    return result.Error("Rol data is required");
-
-                if (string.IsNullOrWhiteSpace(campus.cam_codigo))
-                    return result.Error("Rol code is required for update");
-
-                var response = _campusRepository.CampusUpdate(campus);
-
-                if (response.CodeStatus == 1)
-                    return result.Ok(response);
-                else
-                    return result.Error(response);
-            }
-            catch (Exception ex)
-            {
-                return result.Error($"Unexpected error during rol updating: {ex.Message}");
-            }
-        }
-        
-        public ServiceResult CampusDelete(string campusCodigo)
-        {
-            var result = new ServiceResult();
-
-            if (string.IsNullOrWhiteSpace(campusCodigo))
-                return result.Error("Rol code is required for deletion");
-
-            try
-            {
-                var response = _campusRepository.CampusDelete(campusCodigo);
-
-                return response.CodeStatus == 1
-                    ? result.Ok(response)
-                    : result.Error(response);
-            }
-            catch (Exception ex)
-            {
-                return result.Error($"Unexpected error during rol deletion: {ex.Message}");
-            }
-        }
     }
 }
