@@ -31,11 +31,13 @@ namespace iAcademicGenerator.DataAccess
         public static string SP_RolInsert = "sp_Rol_Insert";
         public static string SP_RolUpdate = "sp_Rol_Update";
         public static string SP_RolDelete = "sp_Rol_Delete";
-        
-        public const string SP_CampusList = "UNI.SP_CampusList";
-        public const string SP_CampusInsert = "UNI.SP_CampusInsert";
-        public const string SP_CampusUpdate = "UNI.SP_CampusUpdate";
-        public const string SP_CampusDelete = "UNI.SP_CampusDelete";
+
+        #region Campus
+        public const string SP_CampusList = "UNI.SP_Campus_List";
+        public const string SP_CampusInsert = "UNI.SP_Campus_Insert";
+        public const string SP_CampusUpdate = "UNI.SP_Campus_Update";
+        public const string SP_CampusDelete = "UNI.SP_Campus_Delete";
+        #endregion
 
 
         #region Modalities
