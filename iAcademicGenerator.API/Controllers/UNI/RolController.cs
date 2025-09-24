@@ -17,7 +17,7 @@ namespace iAcademicGenerator.API.Controllers.UNI
         }
 
         
-        [HttpGet("list-rol")]
+        [HttpGet("list")]
         public IActionResult List()
         {
             var result = _UNIservices.ListRol();
@@ -32,7 +32,7 @@ namespace iAcademicGenerator.API.Controllers.UNI
             }
         }
         
-        [HttpPost("create-rol")]
+        [HttpPost("create")]
         public IActionResult Create([FromBody] RolDTO rol)
         {
 
@@ -60,7 +60,7 @@ namespace iAcademicGenerator.API.Controllers.UNI
             }
         }
         
-        [HttpPost("update-rol")]
+        [HttpPost("update")]
         public IActionResult Update([FromBody] RolDTO rol)
         {
 
@@ -88,7 +88,7 @@ namespace iAcademicGenerator.API.Controllers.UNI
             }
         }
         
-        [HttpDelete("delete-rol")]
+        [HttpDelete("delete")]
         public IActionResult Delete(string rolCodigo)
         {
             var result = _UNIservices.RolDelete(rolCodigo);

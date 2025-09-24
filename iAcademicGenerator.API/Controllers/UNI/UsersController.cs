@@ -16,7 +16,7 @@ namespace iAcademicGenerator.API.Controllers.UNI
             _UNIservices = uniServices ?? throw new ArgumentNullException(nameof(uniServices));
         }
 
-        [HttpGet("list-users")]
+        [HttpGet("list")]
         public IActionResult List()
         {
             var result = _UNIservices.ListUsers();
@@ -31,7 +31,7 @@ namespace iAcademicGenerator.API.Controllers.UNI
             }
         }
 
-        [HttpPost("create-user")]
+        [HttpPost("create")]
         public IActionResult Create([FromBody] UserDTO user)
         {
 
@@ -59,7 +59,7 @@ namespace iAcademicGenerator.API.Controllers.UNI
             }
         }
 
-        [HttpPost("update-user")]
+        [HttpPost("update")]
         public IActionResult Update([FromBody] UserDTO user)
         {
 
@@ -87,7 +87,7 @@ namespace iAcademicGenerator.API.Controllers.UNI
             }
         }
         
-        [HttpDelete("delete-user")]
+        [HttpDelete("delete")]
         public IActionResult Delete(string usuCodigo)
         {
             var result = _UNIservices.UsersDelete(usuCodigo);

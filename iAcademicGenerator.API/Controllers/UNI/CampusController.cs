@@ -16,7 +16,7 @@ namespace iAcademicGenerator.API.Controllers.UNI
         }
 
         
-        [HttpGet("list-campus")]
+        [HttpGet("list")]
         public IActionResult List()
         {
             var result = _UNIservices.ListCampus();
@@ -31,7 +31,7 @@ namespace iAcademicGenerator.API.Controllers.UNI
             }
         }
 
-        [HttpPost("create-campus")]
+        [HttpPost("create")]
         public IActionResult Create([FromBody] CampusDTO campus)
         {
 
@@ -59,7 +59,7 @@ namespace iAcademicGenerator.API.Controllers.UNI
             }
         }
         
-        [HttpPost("update-campus")]
+        [HttpPost("update")]
         public IActionResult Update([FromBody] CampusDTO campus)
         {
 
@@ -87,7 +87,7 @@ namespace iAcademicGenerator.API.Controllers.UNI
             }
         }
         
-        [HttpDelete("delete-campus")]
+        [HttpDelete("delete")]
         public IActionResult Delete(string campusCodigo)
         {
             var result = _UNIservices.CampusDelete(campusCodigo);
