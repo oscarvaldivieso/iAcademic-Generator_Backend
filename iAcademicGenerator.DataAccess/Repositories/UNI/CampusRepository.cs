@@ -25,11 +25,7 @@ namespace iAcademicGenerator.DataAccess.Repositories.UNI
             parameter.Add("@cam_codigo", campus.cam_codigo);
             parameter.Add("@cam_nombre", campus.cam_nombre);
             parameter.Add("@cam_ciudad", campus.cam_ciudad);
-            parameter.Add("@active", campus.active);
-            parameter.Add("@created_at", campus.created_at);
-            parameter.Add("@updated_at", campus.updated_at);
             parameter.Add("@created_by", campus.created_by);
-            parameter.Add("@updated_by", campus.updated_by);
 
             try
             {
@@ -59,8 +55,6 @@ namespace iAcademicGenerator.DataAccess.Repositories.UNI
             parameter.Add("@cam_codigo", campus.cam_codigo);
             parameter.Add("@cam_nombre", campus.cam_nombre);
             parameter.Add("@cam_ciudad", campus.cam_ciudad);
-            parameter.Add("@active", campus.active);
-            parameter.Add("@updated_at", campus.updated_at);
             parameter.Add("@updated_by", campus.updated_by);
 
             try
