@@ -2,17 +2,17 @@
 using iAcademicGenerator.Models.Models;
 using Microsoft.AspNetCore.Mvc;
 
-namespace iAcademicGenerator.API.Controllers.ACA
+namespace iAcademicGenerator.API.Controllers.EXP
 {
     [Route("[controller]")]
     [ApiController]
-    public class SectionsController : Controller
+    public class ContactsController : Controller
     {
-        private readonly ACAServices _ACAservices;
+        private readonly EXPServices _EXPservices;
 
-        public SectionsController(ACAServices acaServices)
+        public ContactsController(EXPServices expServices)
         {
-            _ACAservices = acaServices ?? throw new ArgumentNullException(nameof(acaServices));
+            _EXPservices = expServices ?? throw new ArgumentNullException(nameof(expServices));
         }
 
 
@@ -20,7 +20,7 @@ namespace iAcademicGenerator.API.Controllers.ACA
         [HttpGet("List")]
         public IActionResult List()
         {
-            var result = _ACAservices.ListSections();
+            var result = _EXPservices.ListContacts();
 
             if (result.Success)
             {
@@ -33,12 +33,12 @@ namespace iAcademicGenerator.API.Controllers.ACA
         }
 
         [HttpPost("Create")]
-        public IActionResult Create([FromBody] SectionsDTO sections)
+        public IActionResult Create([FromBody] ContactsDTO contacts)
         {
 
             try
             {
-                var result = _ACAservices.SectionsInsert(sections);
+                var result = _EXPservices.ContactInsert(contacts);
 
                 if (result.Success)
                 {
@@ -61,12 +61,12 @@ namespace iAcademicGenerator.API.Controllers.ACA
         }
 
         [HttpPost("Update")]
-        public IActionResult Update([FromBody] SectionsDTO sections)
+        public IActionResult Update([FromBody] ContactsDTO contacts)
         {
 
             try
             {
-                var result = _ACAservices.SectionsUpdate(sections);
+                var result = _EXPservices.ContactUpdate(contacts);
 
                 if (result.Success)
                 {
@@ -89,9 +89,9 @@ namespace iAcademicGenerator.API.Controllers.ACA
         }
 
         [HttpDelete("Delete")]
-        public IActionResult Delete(string secCodigo)
+        public IActionResult Delete(int id)
         {
-            var result = _ACAservices.SectionsDelete(secCodigo);
+            var result = _EXPservices.ContactsDelete(id);
 
             if (result.Success)
                 return Ok(result);

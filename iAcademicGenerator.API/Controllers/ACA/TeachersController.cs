@@ -6,11 +6,11 @@ namespace iAcademicGenerator.API.Controllers.ACA
 {
     [Route("[controller]")]
     [ApiController]
-    public class SectionsController : Controller
+    public class TeachersController : Controller
     {
         private readonly ACAServices _ACAservices;
 
-        public SectionsController(ACAServices acaServices)
+        public TeachersController(ACAServices acaServices)
         {
             _ACAservices = acaServices ?? throw new ArgumentNullException(nameof(acaServices));
         }
@@ -20,7 +20,7 @@ namespace iAcademicGenerator.API.Controllers.ACA
         [HttpGet("List")]
         public IActionResult List()
         {
-            var result = _ACAservices.ListSections();
+            var result = _ACAservices.ListTeachers();
 
             if (result.Success)
             {
@@ -33,12 +33,12 @@ namespace iAcademicGenerator.API.Controllers.ACA
         }
 
         [HttpPost("Create")]
-        public IActionResult Create([FromBody] SectionsDTO sections)
+        public IActionResult Create([FromBody] TeachersDTO teachers)
         {
 
             try
             {
-                var result = _ACAservices.SectionsInsert(sections);
+                var result = _ACAservices.TeachersInsert(teachers);
 
                 if (result.Success)
                 {
@@ -61,12 +61,12 @@ namespace iAcademicGenerator.API.Controllers.ACA
         }
 
         [HttpPost("Update")]
-        public IActionResult Update([FromBody] SectionsDTO sections)
+        public IActionResult Update([FromBody] TeachersDTO teachers)
         {
 
             try
             {
-                var result = _ACAservices.SectionsUpdate(sections);
+                var result = _ACAservices.TeachersUpdate(teachers);
 
                 if (result.Success)
                 {
@@ -89,9 +89,9 @@ namespace iAcademicGenerator.API.Controllers.ACA
         }
 
         [HttpDelete("Delete")]
-        public IActionResult Delete(string secCodigo)
+        public IActionResult Delete(int id)
         {
-            var result = _ACAservices.SectionsDelete(secCodigo);
+            var result = _ACAservices.TeachersDelete(id);
 
             if (result.Success)
                 return Ok(result);

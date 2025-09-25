@@ -10,37 +10,36 @@ using System.Threading.Tasks;
 
 namespace iAcademicGenerator.DataAccess.Repositories.ACA
 {
-    public class SectionsRepository
+    public class ClassroomsRepository
     {
-        public IEnumerable<SectionsDTO> List()
+
+        public IEnumerable<ClassroomsDTO> List()
         {
             using var db = new SqlConnection(iAcademicGeneratorContext.ConnectionString);
-            var result = db.Query<SectionsDTO>(ScriptDatabase.SP_SectionsList, commandType: System.Data.CommandType.StoredProcedure).ToList();
+            var result = db.Query<ClassroomsDTO>(ScriptDatabase.SP_ClassroomsList, commandType: System.Data.CommandType.StoredProcedure).ToList();
 
             return result;
         }
 
-        public RequestStatus SectionInsert(SectionsDTO sections)
+        public RequestStatus ClassroomInsert(ClassroomsDTO classrooms)
         {
             var parameter = new DynamicParameters();
 
-            parameter.Add("@sec_codigo", sections.sec_codigo);
-            parameter.Add("@sec_semestre", sections.sec_semestre);
-            parameter.Add("@sec_destino", sections.@sec_destino);
-            parameter.Add("@mat_codigo", sections.mat_codigo);
-            parameter.Add("@created_by", sections.created_by);
-            parameter.Add("@cam_codigo", sections.cam_codigo);
+
+            parameter.Add("@auc_codigo", classrooms.auc_codigo);
+            parameter.Add("@cam_codigo", classrooms.cam_codigo);
+            parameter.Add("@created_by", classrooms.created_by);
 
             try
             {
                 using var db = new SqlConnection(iAcademicGeneratorContext.ConnectionString);
-                db.Execute(ScriptDatabase.SP_SectionInsert, parameter, commandType: CommandType.StoredProcedure);
+                db.Execute(ScriptDatabase.SP_ClassroomInsert, parameter, commandType: CommandType.StoredProcedure);
 
 
                 return new RequestStatus
                 {
                     CodeStatus = 1,
-                    MessageStatus = "Section inserted succesfully"
+                    MessageStatus = "Classroom inserted succesfully"
                 };
             }
             catch (Exception ex)
@@ -55,22 +54,20 @@ namespace iAcademicGenerator.DataAccess.Repositories.ACA
 
 
 
-        public RequestStatus SectionUpdate(SectionsDTO sections)
+        public RequestStatus ClassroomUpdate(ClassroomsDTO classrooms)
         {
             var parameter = new DynamicParameters();
 
-            parameter.Add("@sec_codigo", sections.sec_codigo);
-            parameter.Add("@sec_semestre", sections.sec_semestre);
-            parameter.Add("@sec_destino", sections.@sec_destino);
-            parameter.Add("@mat_codigo", sections.mat_codigo);
-            parameter.Add("@updated_by", sections.updated_by);
-            parameter.Add("@cam_codigo", sections.cam_codigo);
+            parameter.Add("@auc_codigo", classrooms.auc_codigo);
+
+            parameter.Add("@cam_codigo", classrooms.cam_codigo);
+            parameter.Add("@updated_by", classrooms.updated_by);
 
             try
             {
                 using var db = new SqlConnection(iAcademicGeneratorContext.ConnectionString);
                 var result = db.QueryFirstOrDefault<RequestStatus>(
-                    ScriptDatabase.SP_SectionUpdate,
+                    ScriptDatabase.SP_ClassroomUpdate,
                     parameter,
                     commandType: CommandType.StoredProcedure
                 );
@@ -92,19 +89,16 @@ namespace iAcademicGenerator.DataAccess.Repositories.ACA
         }
 
 
-        public RequestStatus SectionDelete(string sec_codigo)
+        public RequestStatus ClassroomDelete(string auc_codigo)
         {
             var parameter = new DynamicParameters();
-            parameter.Add("@sec_codigo", sec_codigo);
+            parameter.Add("@auc_codigo", auc_codigo);
 
             try
             {
                 using var db = new SqlConnection(iAcademicGeneratorContext.ConnectionString);
                 var result = db.QueryFirstOrDefault<RequestStatus>(
-                    ScriptDatabase.SP_SectionDelete,
-                    parameter,
-                    commandType: CommandType.StoredProcedure
-                );
+                    ScriptDatabase.SP_ClassromsDelete,parameter,commandType: CommandType.StoredProcedure);
 
                 return result ?? new RequestStatus
                 {
@@ -121,6 +115,7 @@ namespace iAcademicGenerator.DataAccess.Repositories.ACA
                 };
             }
         }
+
 
 
     }
