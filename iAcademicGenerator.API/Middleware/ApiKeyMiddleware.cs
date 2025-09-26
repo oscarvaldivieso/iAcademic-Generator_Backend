@@ -14,6 +14,9 @@
             //_encryption = encryption;
         }
 
+        
+
+
         public async Task InvokeAsync(HttpContext context)
         {
             var appSettings = context.RequestServices.GetRequiredService<IConfiguration>();
@@ -54,7 +57,7 @@
 
                 await _next(context);
             }
-            else if (context.Request.Path == "/api/Usuarios/UsuarioCorreo" || context.Request.Path == "/api/Usuarios/CambiarContrasenia" || context.Request.Path == "/api/Duca/GenerarDuca" || context.Request.Path == "/api/RolesPorPantallas/DibujadoDeMenu")
+            else if (context.Request.Path == "/api/Usuarios/UsuarioCorreo" || context.Request.Path == "/api/Usuarios/CambiarContrasenia" || context.Request.Path == "/api/Duca/GenerarDuca" || context.Request.Path == "/")
             {
                 await _next(context);
             }

@@ -64,6 +64,13 @@ var app = builder.Build();
 app.UseSwagger();
 app.UseSwaggerUI();
 
+app.MapGet("/", context =>
+{
+    context.Response.Redirect("/swagger");
+    return Task.CompletedTask;
+});
+
+
 app.UseHttpsRedirection();
 
 // CORS debe ir ANTES de otros middlewares - IMPORTANTE
