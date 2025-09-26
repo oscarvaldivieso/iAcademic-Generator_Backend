@@ -1,6 +1,7 @@
 ﻿using iAcademicGenerator.BusinessLogic.Services;
 using iAcademicGenerator.DataAccess;
 using iAcademicGenerator.DataAccess.Repositories.ACA;
+using iAcademicGenerator.DataAccess.Repositories.EXP;
 using iAcademicGenerator.DataAccess.Repositories.UNI;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Identity.Client;
@@ -30,6 +31,11 @@ namespace iAcademicGenerator.BusinessLogic
             
 
             services.AddScoped<SectionsRepository>();
+            services.AddScoped<ClassroomsRepository>();
+            services.AddScoped<TeachersRepository>();
+            services.AddScoped<AreasRepository>();
+            services.AddScoped<SubjectsRepository>();
+            services.AddScoped<ContactsRepository>();
 
         }
 
@@ -37,6 +43,7 @@ namespace iAcademicGenerator.BusinessLogic
         {
             services.AddScoped<UNIServices>();
             services.AddScoped<ACAServices>();
+              services.AddScoped<EXPServices>();
         }
 
 

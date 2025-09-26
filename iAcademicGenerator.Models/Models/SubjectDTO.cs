@@ -6,17 +6,21 @@ using System.Threading.Tasks;
 
 namespace iAcademicGenerator.Models.Models
 {
-    public class PeriodsDTO
+    public class SubjectDTO
     {
-        public string per_codigo { get; set; }
-        public string per_modulo { get; set; }
-        public int per_anio { get; set; }
-        public DateTime? per_inicio { get; set; }
-        public DateTime? per_fin { get; set; }
+
+        public string mat_codigo { get; set; }
+        public string mat_nombre { get; set; }
+        public string? are_codigo { get; set; }
+        public int? mat_nivel { get; set; }
+        public bool mat_es_core { get; set; }
         public bool active { get; set; }
         public DateTime? created_at { get; set; }
         public DateTime? updated_at { get; set; }
         public string? created_by { get; set; }
         public string? updated_by { get; set; }
+
+
+
     }
 }

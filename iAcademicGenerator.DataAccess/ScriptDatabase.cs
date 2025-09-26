@@ -54,5 +54,52 @@ namespace iAcademicGenerator.DataAccess
         public static string SP_PeriodDelete = "[UNI].[SP_Period_Delete]";
         #endregion
 
+
+        #region Areas
+        public static string SP_AreasList  = "[ACA].[SP_Areas_List]";
+        public static string SP_AreaInsert = "[ACA].[SP_Area_Insert]";
+        public static string SP_AreaUpdate = "[ACA].[SP_Area_Update]";
+        public static string SP_AreaDelete = "[ACA].[SP_Area_Delete]";
+        #endregion
+        
+        #region Sections
+        public static string SP_SectionsList  = "[ACA].[SP_Sections_List]";
+        public static string SP_SectionInsert = "[ACA].[SP_Section_Insert]";
+        public static string SP_SectionUpdate = "[ACA].[SP_Section_Update]";
+        public static string SP_SectionDelete = "[ACA].[SP_Section_Delete]";
+        #endregion
+
+        #region Contacts
+        public static string SP_ContactsList  = "[EXP].[SP_Contacts_List]";
+        public static string SP_ContactInsert = "[EXP].[SP_Contact_Insert]";
+        public static string SP_ContactUpdate = "[EXP].[SP_Contact_Update]";
+        public static string SP_ContactDelete = "[EXP].[SP_Contact_Delete]";
+        #endregion
+
+        #region Teachers
+        public static string SP_TeachersList  = "[ACA].[SP_Teachers_List]";
+        public static string SP_TeacherInsert = "[ACA].[SP_Teacher_Insert]";
+        public static string SP_TeacherUpdate = "[ACA].[SP_Teacher_Update]";
+        public static string SP_TeacherDelete = "[ACA].[SP_Teacher_Delete]";
+        #endregion
+
+        #region Classroooms
+        public static string SP_ClassroomsList  = "[ACA].[SP_Classrooms_List]";
+        public static string SP_ClassroomInsert = "[ACA].[SP_Classroom_Insert]";
+        public static string SP_ClassroomUpdate = "[ACA].[SP_Classroom_Update]";
+        public static string SP_ClassromsDelete = "[ACA].[SP_Classroom_Delete]";
+        #endregion
+
+        #region Subjects
+        public static string SP_SubjectsList  = "[ACA].[SP_Subjects_List]";
+        public static string SP_SubjectInsert = "[ACA].[SP_Subject_Insert]";
+        public static string SP_SubjectUpdate = "[ACA].[SP_Subject_Update]";
+        public static string SP_SubjectDelete = "[ACA].[SP_Subject_Delete]";
+        #endregion
+
+
+
+
+
     }
 }

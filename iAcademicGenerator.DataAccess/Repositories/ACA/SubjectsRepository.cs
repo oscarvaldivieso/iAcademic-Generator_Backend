@@ -1,41 +1,47 @@
 ﻿using Dapper;
 using iAcademicGenerator.Models.Models;
 using Microsoft.Data.SqlClient;
+using System;
+using System.Collections.Generic;
 using System.Data;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace iAcademicGenerator.DataAccess.Repositories.UNI
+namespace iAcademicGenerator.DataAccess.Repositories.ACA
 {
-    public class CampusRepository
+    public class SubjectsRepository
     {
-        public IEnumerable<CampusDTO> List()
+
+        public IEnumerable<SubjectDTO> List()
         {
             using var db = new SqlConnection(iAcademicGeneratorContext.ConnectionString);
-            var result = db.Query<CampusDTO>(
-                ScriptDatabase.SP_CampusList,
-                commandType: CommandType.StoredProcedure
-            ).ToList();
+            var result = db.Query<SubjectDTO>(ScriptDatabase.SP_SubjectsList, commandType: System.Data.CommandType.StoredProcedure).ToList();
 
             return result;
         }
 
-        public RequestStatus CampusInsert(CampusDTO campus)
+        public RequestStatus SubjectInsert(SubjectDTO subjects)
         {
             var parameter = new DynamicParameters();
 
-            parameter.Add("@cam_codigo", campus.cam_codigo);
-            parameter.Add("@cam_nombre", campus.cam_nombre);
-            parameter.Add("@cam_ciudad", campus.cam_ciudad);
-            parameter.Add("@created_by", campus.created_by);
+            parameter.Add("@mat_codigo", subjects.mat_codigo);  
+            parameter.Add("@mat_nombre", subjects.mat_nombre);
+            parameter.Add("@mat_nivel", subjects.mat_nivel);
+            parameter.Add("@mat_es_core", subjects.mat_es_core);
+            parameter.Add("@are_codigo", subjects.are_codigo);
+            parameter.Add("@created_by", subjects.created_by);
 
             try
             {
                 using var db = new SqlConnection(iAcademicGeneratorContext.ConnectionString);
-                db.Execute(ScriptDatabase.SP_CampusInsert, parameter, commandType: CommandType.StoredProcedure);
+                db.Execute(ScriptDatabase.SP_SubjectInsert, parameter, commandType: CommandType.StoredProcedure);
+
 
                 return new RequestStatus
                 {
                     CodeStatus = 1,
-                    MessageStatus = "Campus inserted successfully"
+                    MessageStatus = "Subject inserted succesfully"
                 };
             }
             catch (Exception ex)
@@ -48,20 +54,24 @@ namespace iAcademicGenerator.DataAccess.Repositories.UNI
             }
         }
 
-        public RequestStatus CampusUpdate(CampusDTO campus)
+
+
+        public RequestStatus SubjectUpdate(SubjectDTO subjects)
         {
             var parameter = new DynamicParameters();
 
-            parameter.Add("@cam_codigo", campus.cam_codigo);
-            parameter.Add("@cam_nombre", campus.cam_nombre);
-            parameter.Add("@cam_ciudad", campus.cam_ciudad);
-            parameter.Add("@updated_by", campus.updated_by);
+            parameter.Add("@mat_codigo", subjects.mat_codigo);
+            parameter.Add("@mat_nombre", subjects.mat_nombre);
+            parameter.Add("@mat_nivel", subjects.mat_nivel);
+            parameter.Add("@mat_es_core", subjects.mat_es_core);
+            parameter.Add("@are_codigo", subjects.are_codigo);
+            parameter.Add("@updated_by", subjects.updated_by);
 
             try
             {
                 using var db = new SqlConnection(iAcademicGeneratorContext.ConnectionString);
                 var result = db.QueryFirstOrDefault<RequestStatus>(
-                    ScriptDatabase.SP_CampusUpdate,
+                    ScriptDatabase.SP_SubjectUpdate,
                     parameter,
                     commandType: CommandType.StoredProcedure
                 );
@@ -82,16 +92,17 @@ namespace iAcademicGenerator.DataAccess.Repositories.UNI
             }
         }
 
-        public RequestStatus CampusDelete(string cam_codigo)
+
+        public RequestStatus SubjectDelete(string mat_codigo)
         {
             var parameter = new DynamicParameters();
-            parameter.Add("@cam_codigo", cam_codigo);
+            parameter.Add("@mat_codigo", mat_codigo);
 
             try
             {
                 using var db = new SqlConnection(iAcademicGeneratorContext.ConnectionString);
                 var result = db.QueryFirstOrDefault<RequestStatus>(
-                    ScriptDatabase.SP_CampusDelete,
+                    ScriptDatabase.SP_SubjectDelete,
                     parameter,
                     commandType: CommandType.StoredProcedure
                 );
@@ -111,6 +122,8 @@ namespace iAcademicGenerator.DataAccess.Repositories.UNI
                 };
             }
         }
+
+
+
     }
 }
-

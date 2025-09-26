@@ -1,41 +1,43 @@
 ﻿using Dapper;
 using iAcademicGenerator.Models.Models;
 using Microsoft.Data.SqlClient;
+using System;
+using System.Collections.Generic;
 using System.Data;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace iAcademicGenerator.DataAccess.Repositories.UNI
+namespace iAcademicGenerator.DataAccess.Repositories.ACA
 {
-    public class CampusRepository
+    public class AreasRepository
     {
-        public IEnumerable<CampusDTO> List()
+        public IEnumerable<AreasDTO> List()
         {
             using var db = new SqlConnection(iAcademicGeneratorContext.ConnectionString);
-            var result = db.Query<CampusDTO>(
-                ScriptDatabase.SP_CampusList,
-                commandType: CommandType.StoredProcedure
-            ).ToList();
+            var result = db.Query<AreasDTO>(ScriptDatabase.SP_AreasList, commandType: System.Data.CommandType.StoredProcedure).ToList();
 
             return result;
         }
 
-        public RequestStatus CampusInsert(CampusDTO campus)
+        public RequestStatus AreaInsert(AreasDTO areas)
         {
             var parameter = new DynamicParameters();
 
-            parameter.Add("@cam_codigo", campus.cam_codigo);
-            parameter.Add("@cam_nombre", campus.cam_nombre);
-            parameter.Add("@cam_ciudad", campus.cam_ciudad);
-            parameter.Add("@created_by", campus.created_by);
+            parameter.Add("@are_codigo", areas.are_codigo);
+            parameter.Add("@are_nombre", areas.are_nombre);
+            parameter.Add("@created_by", areas.created_by);
 
             try
             {
                 using var db = new SqlConnection(iAcademicGeneratorContext.ConnectionString);
-                db.Execute(ScriptDatabase.SP_CampusInsert, parameter, commandType: CommandType.StoredProcedure);
+                db.Execute(ScriptDatabase.SP_AreaInsert, parameter, commandType: CommandType.StoredProcedure);
+
 
                 return new RequestStatus
                 {
                     CodeStatus = 1,
-                    MessageStatus = "Campus inserted successfully"
+                    MessageStatus = "Area inserted succesfully"
                 };
             }
             catch (Exception ex)
@@ -48,20 +50,21 @@ namespace iAcademicGenerator.DataAccess.Repositories.UNI
             }
         }
 
-        public RequestStatus CampusUpdate(CampusDTO campus)
+
+
+        public RequestStatus AreaUpdate(AreasDTO areas)
         {
             var parameter = new DynamicParameters();
 
-            parameter.Add("@cam_codigo", campus.cam_codigo);
-            parameter.Add("@cam_nombre", campus.cam_nombre);
-            parameter.Add("@cam_ciudad", campus.cam_ciudad);
-            parameter.Add("@updated_by", campus.updated_by);
+            parameter.Add("@are_codigo", areas.are_codigo);
+            parameter.Add("@are_nombre", areas.are_nombre);
+            parameter.Add("@updated_by", areas.updated_by);
 
             try
             {
                 using var db = new SqlConnection(iAcademicGeneratorContext.ConnectionString);
                 var result = db.QueryFirstOrDefault<RequestStatus>(
-                    ScriptDatabase.SP_CampusUpdate,
+                    ScriptDatabase.SP_AreaUpdate,
                     parameter,
                     commandType: CommandType.StoredProcedure
                 );
@@ -82,16 +85,17 @@ namespace iAcademicGenerator.DataAccess.Repositories.UNI
             }
         }
 
-        public RequestStatus CampusDelete(string cam_codigo)
+
+        public RequestStatus AreaDelete(string areaCode)
         {
             var parameter = new DynamicParameters();
-            parameter.Add("@cam_codigo", cam_codigo);
+            parameter.Add("@are_codigo", areaCode);
 
             try
             {
                 using var db = new SqlConnection(iAcademicGeneratorContext.ConnectionString);
                 var result = db.QueryFirstOrDefault<RequestStatus>(
-                    ScriptDatabase.SP_CampusDelete,
+                    ScriptDatabase.SP_AreaDelete,
                     parameter,
                     commandType: CommandType.StoredProcedure
                 );
@@ -111,6 +115,7 @@ namespace iAcademicGenerator.DataAccess.Repositories.UNI
                 };
             }
         }
+
+
     }
 }
-
