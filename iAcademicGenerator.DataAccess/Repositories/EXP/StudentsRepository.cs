@@ -126,5 +126,122 @@ namespace iAcademicGenerator.DataAccess.Repositories.EXP
                 };
             }
         }
+
+        public IEnumerable<StudentsDTO> List()
+        {
+            using var db = new SqlConnection(iAcademicGeneratorContext.ConnectionString);
+            var result = db.Query<StudentsDTO>(ScriptDatabase.SP_StudentsList, commandType: System.Data.CommandType.StoredProcedure).ToList();
+
+            return result;
+        }
+
+
+        public RequestStatus StudentInsert(StudentsDTO students)
+        {
+            var parameter = new DynamicParameters();
+
+            parameter.Add("@est_codigo", students.est_codigo);
+            parameter.Add("@est_nombre", students.est_nombre);
+            parameter.Add("@est_genero", students.est_genero);
+            parameter.Add("@est_indice_general", students.est_indice_general);
+            parameter.Add("@est_indice_graduacion", students.est_indice_graduacion);
+            parameter.Add("@car_codigo", students.car_codigo);
+            parameter.Add("@cam_codigo", students.cam_codigo);
+            parameter.Add("@gru_codigo", students.gru_codigo);
+            parameter.Add("@created_by", students.created_by);
+
+            try
+            {
+                using var db = new SqlConnection(iAcademicGeneratorContext.ConnectionString);
+                db.Execute(ScriptDatabase.SP_StudentInsert, parameter, commandType: CommandType.StoredProcedure);
+
+
+                return new RequestStatus
+                {
+                    CodeStatus = 1,
+                    MessageStatus = "Student inserted succesfully"
+                };
+            }
+            catch (Exception ex)
+            {
+                return new RequestStatus
+                {
+                    CodeStatus = 0,
+                    MessageStatus = $"Unexpected error: {ex.Message}"
+                };
+            }
+        }
+
+
+
+        public RequestStatus StudentUpdate(StudentsDTO students)
+        {
+            var parameter = new DynamicParameters();
+            parameter.Add("@est_codigo", students.est_codigo);
+            parameter.Add("@est_nombre", students.est_nombre);
+            parameter.Add("@est_genero", students.est_genero);
+            parameter.Add("@est_indice_general", students.est_indice_general);
+            parameter.Add("@est_indice_graduacion", students.est_indice_graduacion);
+            parameter.Add("@car_codigo", students.car_codigo);
+            parameter.Add("@cam_codigo", students.cam_codigo);
+            parameter.Add("@gru_codigo", students.gru_codigo);
+            parameter.Add("@updated_by", students.updated_by);
+
+            try
+            {
+                using var db = new SqlConnection(iAcademicGeneratorContext.ConnectionString);
+                var result = db.QueryFirstOrDefault<RequestStatus>(
+                    ScriptDatabase.SP_StudentUpdate,
+                    parameter,
+                    commandType: CommandType.StoredProcedure
+                );
+
+                return result ?? new RequestStatus
+                {
+                    CodeStatus = 0,
+                    MessageStatus = "Unknown error during update"
+                };
+            }
+            catch (Exception ex)
+            {
+                return new RequestStatus
+                {
+                    CodeStatus = 0,
+                    MessageStatus = $"Unexpected error: {ex.Message}"
+                };
+            }
+        }
+
+
+        public RequestStatus StudentDelete(int student)
+        {
+            var parameter = new DynamicParameters();
+            parameter.Add("@est_codigo", student);
+
+            try
+            {
+                using var db = new SqlConnection(iAcademicGeneratorContext.ConnectionString);
+                var result = db.QueryFirstOrDefault<RequestStatus>(
+                    ScriptDatabase.SP_StudentDelete,
+                    parameter,
+                    commandType: CommandType.StoredProcedure
+                );
+
+                return result ?? new RequestStatus
+                {
+                    CodeStatus = 0,
+                    MessageStatus = "Unknown error during deletion"
+                };
+            }
+            catch (Exception ex)
+            {
+                return new RequestStatus
+                {
+                    CodeStatus = 0,
+                    MessageStatus = $"Unexpected error: {ex.Message}"
+                };
+            }
+        }
+
     }
 }

@@ -270,6 +270,75 @@ namespace iAcademicGenerator.BusinessLogic.Services
             return errores;
         }
 
+
+        public ServiceResult ListStudents()
+        {
+            var result = new ServiceResult();
+            try
+            {
+                var response = _studentsRepository.List();
+                return result.Ok(response);
+            }
+            catch (Exception ex)
+            {
+                return result.Error(ex.Message);
+            }
+        }
+
+        public ServiceResult StudentInsert(StudentsDTO students)
+        {
+            var result = new ServiceResult();
+            try
+            {
+                var response = _studentsRepository.StudentInsert(students);
+                if (response.CodeStatus == 1)
+                    return result.Ok(response);
+                else
+                    return result.Error(response.MessageStatus);
+            }
+            catch (Exception ex)
+            {
+                return result.Error(ex.Message);
+            }
+        }
+        public ServiceResult StudentUpdate(StudentsDTO students)
+        {
+            var result = new ServiceResult();
+            try
+            {
+                var response = _studentsRepository.StudentUpdate(students);
+                if (response.CodeStatus == 1)
+                    return result.Ok(response);
+                else
+                    return result.Error(response.MessageStatus);
+            }
+            catch (Exception ex)
+            {
+                return result.Error(ex.Message);
+            }
+        }
+
+        public ServiceResult StudentDelete(int id)
+        {
+            var result = new ServiceResult();
+
+            if (id == null)
+                return result.Error("Student's code is required for deletion");
+
+            try
+            {
+                var response = _studentsRepository.StudentDelete(id);
+
+                return response.CodeStatus == 1
+                    ? result.Ok(response)
+                    : result.Error(response);
+            }
+            catch (Exception ex)
+            {
+                return result.Error($"Unexpected error during student deletion: {ex.Message}");
+            }
+        }
+
         #endregion
 
 

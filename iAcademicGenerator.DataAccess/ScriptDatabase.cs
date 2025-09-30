@@ -99,6 +99,10 @@ namespace iAcademicGenerator.DataAccess
 
         #region Students
         public const string SP_StudentsBulkInsert = "EXP.SP_Students_BulkInsert";
+        public static string SP_StudentsList = "[EXP].[SP_Students_List]";
+        public static string SP_StudentInsert = "[EXP].[SP_Student_Insert]";
+        public static string SP_StudentUpdate = "[EXP].[SP_Student_Update]";
+        public static string SP_StudentDelete = "[EXP].[SP_Student_Delete]";
         #endregion
 
 

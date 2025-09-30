@@ -8,6 +8,19 @@ namespace iAcademicGenerator.Models.Models
 {
     public class StudentsDTO
     {
+        public string est_codigo { get; set; }
+        public string est_nombre { get; set; }
+        public string est_genero { get; set; }
+        public decimal? est_indice_general { get; set; }
+        public decimal? est_indice_graduacion { get; set; }
+        public string car_codigo { get; set; }
+        public bool? active { get; set; }
+        public DateTime? created_at { get; set; }
+        public DateTime? updated_at { get; set; }
+        public string created_by { get; set; }
+        public string updated_by { get; set; }
+        public string cam_codigo { get; set; }
+        public string gru_codigo { get; set; }
     }
 
     public class StudentBulkDTO

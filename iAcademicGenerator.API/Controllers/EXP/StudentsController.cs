@@ -77,10 +77,86 @@ namespace iAcademicGenerator.API.Controllers.EXP
             }
         }
 
-        // Aquí puedes agregar tus otros endpoints de estudiantes...
-        // [HttpGet("List")]
-        // [HttpPost("Create")]
-        // [HttpPost("Update")]
-        // [HttpDelete("Delete")]
+        [HttpGet("List")]
+        public IActionResult List()
+        {
+            var result = _expServices.ListStudents();
+
+            if (result.Success)
+            {
+                return Ok(result);
+            }
+            else
+            {
+                return BadRequest(result);
+            }
+        }
+
+        [HttpPost("Create")]
+        public IActionResult Create([FromBody] StudentsDTO student)
+        {
+
+            try
+            {
+                var result = _expServices.StudentInsert(student);
+
+                if (result.Success)
+                {
+                    return Ok(result);
+                }
+                else
+                {
+                    return BadRequest(result);
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new
+                {
+                    Success = false,
+                    Message = "Internal server error",
+                    Details = ex.Message
+                });
+            }
+        }
+
+        [HttpPost("Update")]
+        public IActionResult Update([FromBody] StudentsDTO student)
+        {
+
+            try
+            {
+                var result = _expServices.StudentUpdate(student);
+
+                if (result.Success)
+                {
+                    return Ok(result);
+                }
+                else
+                {
+                    return BadRequest(result);
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new
+                {
+                    Success = false,
+                    Message = "Internal server error",
+                    Details = ex.Message
+                });
+            }
+        }
+
+        [HttpDelete("Delete")]
+        public IActionResult Delete(int id)
+        {
+            var result = _expServices.StudentDelete(id);
+
+            if (result.Success)
+                return Ok(result);
+            else
+                return BadRequest(result);
+        }
     }
 }
