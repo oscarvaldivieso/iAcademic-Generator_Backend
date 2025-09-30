@@ -97,6 +97,10 @@ namespace iAcademicGenerator.DataAccess
         public static string SP_SubjectDelete = "[ACA].[SP_Subject_Delete]";
         #endregion
 
+        #region Students
+        public const string SP_StudentsBulkInsert = "EXP.SP_Students_BulkInsert";
+        #endregion
+
 
 
 

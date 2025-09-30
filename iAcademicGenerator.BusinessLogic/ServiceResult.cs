@@ -1,4 +1,5 @@
-﻿using System;
+﻿using iAcademicGenerator.Models.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -226,6 +227,11 @@ namespace iAcademicGenerator.BusinessLogic
             Message = message;
             Type = serviceResultType;
             return this;
+        }
+
+        internal ServiceResult Ok(BulkInsertResponseDTO response, string v)
+        {
+            throw new NotImplementedException();
         }
 
         public ServiceResult()

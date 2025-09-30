@@ -37,6 +37,8 @@ namespace iAcademicGenerator.BusinessLogic
             services.AddScoped<SubjectsRepository>();
             services.AddScoped<ContactsRepository>();
 
+            services.AddScoped<StudentsRepository>();
+
         }
 
         public static void BusinessLogic(this IServiceCollection services)
