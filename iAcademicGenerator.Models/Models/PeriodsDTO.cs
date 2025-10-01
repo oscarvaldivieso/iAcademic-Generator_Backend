@@ -9,7 +9,7 @@ namespace iAcademicGenerator.Models.Models
     public class PeriodsDTO
     {
         public string per_codigo { get; set; }
-        public string per_modulo { get; set; }
+        public string per_trimestre { get; set; }
         public int per_anio { get; set; }
         public DateTime? per_inicio { get; set; }
         public DateTime? per_fin { get; set; }

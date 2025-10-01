@@ -27,7 +27,7 @@ namespace iAcademicGenerator.DataAccess.Repositories.UNI
 
             //Input parameters here
             parameter.Add("@per_codigo", period.per_codigo);
-            parameter.Add("@per_modulo", period.per_modulo);
+            parameter.Add("@per_trimestre", period.per_trimestre);
             parameter.Add("@per_anio", period.per_anio);
             parameter.Add("@per_inicio", period.per_inicio);
             parameter.Add("@per_fin", period.per_fin);
@@ -62,7 +62,7 @@ namespace iAcademicGenerator.DataAccess.Repositories.UNI
             var parameter = new DynamicParameters();
 
             parameter.Add("@per_codigo", period.per_codigo);
-            parameter.Add("@per_modulo", period.per_modulo);
+            parameter.Add("@per_trimestre", period.per_trimestre);
             parameter.Add("@per_anio", period.per_anio);
             parameter.Add("@per_inicio", period.per_inicio);
             parameter.Add("@per_fin", period.per_fin);
