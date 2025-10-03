@@ -16,17 +16,17 @@ namespace iAcademicGenerator.DataAccess
         public static string SP_CareerUpdate = "[UNI].[SP_Career_Update]";
         public static string SP_CareerDelete = "[UNI].[SP_Career_Delete]";
         #endregion
-        
+
         public static string SP_UsersList = "sp_Users_List";
         public static string SP_UserInsert = "sp_Users_Insert";
         public static string SP_UserUpdate = "sp_Users_Update";
         public static string SP_UserDelete = "sp_Users_Delete";
-        
+
         public static string SP_UserRolesList = "sp_UserRoles_List";
         public static string SP_UserRoleInsert = "sp_UserRoles_Insert";
         public static string SP_UserRoleUpdate = "sp_UserRoles_Update";
         public static string SP_UserRoleDelete = "sp_UserRoles_Delete";
-        
+
         public static string SP_RolList = "sp_Rol_List";
         public static string SP_RolInsert = "sp_Rol_Insert";
         public static string SP_RolUpdate = "sp_Rol_Update";
@@ -56,42 +56,42 @@ namespace iAcademicGenerator.DataAccess
 
 
         #region Areas
-        public static string SP_AreasList  = "[ACA].[SP_Areas_List]";
+        public static string SP_AreasList = "[ACA].[SP_Areas_List]";
         public static string SP_AreaInsert = "[ACA].[SP_Area_Insert]";
         public static string SP_AreaUpdate = "[ACA].[SP_Area_Update]";
         public static string SP_AreaDelete = "[ACA].[SP_Area_Delete]";
         #endregion
-        
+
         #region Sections
-        public static string SP_SectionsList  = "[ACA].[SP_Sections_List]";
+        public static string SP_SectionsList = "[ACA].[SP_Sections_List]";
         public static string SP_SectionInsert = "[ACA].[SP_Section_Insert]";
         public static string SP_SectionUpdate = "[ACA].[SP_Section_Update]";
         public static string SP_SectionDelete = "[ACA].[SP_Section_Delete]";
         #endregion
 
         #region Contacts
-        public static string SP_ContactsList  = "[EXP].[SP_Contacts_List]";
+        public static string SP_ContactsList = "[EXP].[SP_Contacts_List]";
         public static string SP_ContactInsert = "[EXP].[SP_Contact_Insert]";
         public static string SP_ContactUpdate = "[EXP].[SP_Contact_Update]";
         public static string SP_ContactDelete = "[EXP].[SP_Contact_Delete]";
         #endregion
 
         #region Teachers
-        public static string SP_TeachersList  = "[ACA].[SP_Teachers_List]";
+        public static string SP_TeachersList = "[ACA].[SP_Teachers_List]";
         public static string SP_TeacherInsert = "[ACA].[SP_Teacher_Insert]";
         public static string SP_TeacherUpdate = "[ACA].[SP_Teacher_Update]";
         public static string SP_TeacherDelete = "[ACA].[SP_Teacher_Delete]";
         #endregion
 
         #region Classroooms
-        public static string SP_ClassroomsList  = "[ACA].[SP_Classrooms_List]";
+        public static string SP_ClassroomsList = "[ACA].[SP_Classrooms_List]";
         public static string SP_ClassroomInsert = "[ACA].[SP_Classroom_Insert]";
         public static string SP_ClassroomUpdate = "[ACA].[SP_Classroom_Update]";
         public static string SP_ClassromsDelete = "[ACA].[SP_Classroom_Delete]";
         #endregion
 
         #region Subjects
-        public static string SP_SubjectsList  = "[ACA].[SP_Subjects_List]";
+        public static string SP_SubjectsList = "[ACA].[SP_Subjects_List]";
         public static string SP_SubjectInsert = "[ACA].[SP_Subject_Insert]";
         public static string SP_SubjectUpdate = "[ACA].[SP_Subject_Update]";
         public static string SP_SubjectDelete = "[ACA].[SP_Subject_Delete]";
@@ -103,6 +103,11 @@ namespace iAcademicGenerator.DataAccess
         public static string SP_StudentInsert = "[EXP].[SP_Student_Insert]";
         public static string SP_StudentUpdate = "[EXP].[SP_Student_Update]";
         public static string SP_StudentDelete = "[EXP].[SP_Student_Delete]";
+        #endregion
+
+
+        #region Auth
+        public static string SP_User_Login = "SEC.SP_User_Login";
         #endregion
 
 
