@@ -27,8 +27,10 @@ namespace iAcademicGenerator.DataAccess
         public static string SP_UserRoleUpdate = "sp_UserRoles_Update";
         public static string SP_UserRoleDelete = "sp_UserRoles_Delete";
 
-        public static string SP_RolList = "sp_Rol_List";
-        public static string SP_RolInsert = "sp_Rol_Insert";
+        public static string SP_RolList = "[SEC].[SP_Roles_List]";
+        public static string SP_Rol_CreateWithPermissions = "[SEC].[SP_Roles_CreateWithPermissions]";
+        public const string SP_Roles_UpdateWithPermissions = "[SEC].[SP_Roles_UpdateWithPermissions]";
+        public const string SP_Roles_GetPermissionsWithStatus = "[SEC].[SP_Roles_GetPermissionsWithStatus]";
         public static string SP_RolUpdate = "sp_Rol_Update";
         public static string SP_RolDelete = "sp_Rol_Delete";
 

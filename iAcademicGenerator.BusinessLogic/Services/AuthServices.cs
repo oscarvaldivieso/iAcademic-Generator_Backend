@@ -15,12 +15,16 @@ namespace iAcademicGenerator.BusinessLogic.Services
     public class AuthServices
     {
         private readonly AuthRepository _authRepository;
+        private readonly RolesRepository _rolesRepository;
 
-        public AuthServices(AuthRepository authRepository)
+        public AuthServices(AuthRepository authRepository, RolesRepository rolesRepository)
         {
             _authRepository = authRepository;
+            _rolesRepository = rolesRepository;
         }
 
+
+        #region login
         public ServiceResult Login(LoginRequestDTO loginRequest)
         {
             var result = new ServiceResult();
@@ -125,5 +129,110 @@ namespace iAcademicGenerator.BusinessLogic.Services
 
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
+        #endregion
+
+        #region Roles
+        public ServiceResult ListRoles()
+        {
+            var result = new ServiceResult();
+            try
+            {
+                var response = _rolesRepository.List();
+                return result.Ok(response);
+            }
+            catch (Exception ex)
+            {
+                return result.Error(ex.Message);
+            }
+        }
+
+        public ServiceResult CreateRoleWithPermissions(RoleCreateDTO role)
+        {
+            var result = new ServiceResult();
+
+            try
+            {
+                // Validaciones
+                if (role == null)
+                    return result.BadRequest("Role data is required");
+
+                if (string.IsNullOrWhiteSpace(role.rol_codigo))
+                    return result.BadRequest("Role code is required");
+
+                if (string.IsNullOrWhiteSpace(role.rol_nombre))
+                    return result.BadRequest("Role name is required");
+
+                if (role.permisos == null || !role.permisos.Any())
+                    return result.BadRequest("At least one permission is required");
+
+                if (string.IsNullOrWhiteSpace(role.created_by))
+                    return result.BadRequest("Created by is required");
+
+                // Llamar al repository
+                var response = _rolesRepository.CreateRoleWithPermissions(role);
+
+                if (response.CodeStatus == 1)
+                    return result.Ok(response);
+                else
+                    return result.Error(response);
+            }
+            catch (Exception ex)
+            {
+                return result.Error($"Unexpected error during role creation: {ex.Message}");
+            }
+        }
+
+        public ServiceResult UpdateRoleWithPermissions(RoleUpdateDTO role)
+        {
+            var result = new ServiceResult();
+
+            try
+            {
+                if (role == null)
+                    return result.BadRequest("Role data is required");
+
+                if (string.IsNullOrWhiteSpace(role.rol_codigo))
+                    return result.BadRequest("Role code is required");
+
+                if (string.IsNullOrWhiteSpace(role.rol_nombre))
+                    return result.BadRequest("Role name is required");
+
+                if (role.permisos == null || !role.permisos.Any())
+                    return result.BadRequest("At least one permission is required");
+
+                if (string.IsNullOrWhiteSpace(role.updated_by))
+                    return result.BadRequest("Updated by is required");
+
+                var response = _rolesRepository.UpdateRoleWithPermissions(role);
+
+                return response.CodeStatus == 1
+                    ? result.Ok(response)
+                    : result.Error(response);
+            }
+            catch (Exception ex)
+            {
+                return result.Error($"Unexpected error during role update: {ex.Message}");
+            }
+        }
+
+
+        public ServiceResult GetRolePermissions(string rolCodigo)
+        {
+            var result = new ServiceResult();
+
+            try
+            {
+                if (string.IsNullOrWhiteSpace(rolCodigo))
+                    return result.BadRequest("Role code is required");
+
+                var response = _rolesRepository.GetPermissionsWithStatus(rolCodigo);
+                return result.Ok(response);
+            }
+            catch (Exception ex)
+            {
+                return result.Error($"Unexpected error getting permissions: {ex.Message}");
+            }
+        }
+        #endregion
     }
 }

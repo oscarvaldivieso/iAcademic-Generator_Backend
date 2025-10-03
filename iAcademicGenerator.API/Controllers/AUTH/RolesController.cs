@@ -1,26 +1,27 @@
 using iAcademicGenerator.BusinessLogic.Services;
 using iAcademicGenerator.Models.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace iAcademicGenerator.API.Controllers.UNI
+namespace iAcademicGenerator.API.Controllers.AUTH
 
 {
     [Route("[controller]")]
     [ApiController]
     public class RolesController : Controller
     {
-        private readonly UNIServices _UNIservices;
+        private readonly AuthServices _authServices;
 
-        public RolesController(UNIServices uniServices)
+        public RolesController(AuthServices AuthServices)
         {
-            _UNIservices = uniServices ?? throw new ArgumentNullException(nameof(uniServices));
+            _authServices = AuthServices ?? throw new ArgumentNullException(nameof(AuthServices));
         }
 
 
         [HttpGet("list")]
         public IActionResult List()
         {
-            var result = _UNIservices.ListRoles();
+            var result = _authServices.ListRoles();
 
             if (result.Success)
             {
@@ -31,23 +32,18 @@ namespace iAcademicGenerator.API.Controllers.UNI
                 return BadRequest(result);
             }
         }
-        
+
         [HttpPost("create")]
-        public IActionResult Create([FromBody] RolesDTO roles)
+        public IActionResult Create([FromBody] RoleCreateDTO role)
         {
-
             try
             {
-                var result = _UNIservices.RolesInsert(roles);
+                var result = _authServices.CreateRoleWithPermissions(role);
 
                 if (result.Success)
-                {
                     return Ok(result);
-                }
                 else
-                {
                     return BadRequest(result);
-                }
             }
             catch (Exception ex)
             {
@@ -59,22 +55,19 @@ namespace iAcademicGenerator.API.Controllers.UNI
                 });
             }
         }
-        [HttpPost("update")]
-        public IActionResult Update([FromBody] RolesDTO roles)
-        {
 
+
+        [HttpPut("update")]
+        public IActionResult Update([FromBody] RoleUpdateDTO role)
+        {
             try
             {
-                var result = _UNIservices.RolesUpdate(roles);
+                var result = _authServices.UpdateRoleWithPermissions(role);
 
                 if (result.Success)
-                {
                     return Ok(result);
-                }
                 else
-                {
                     return BadRequest(result);
-                }
             }
             catch (Exception ex)
             {
@@ -86,16 +79,21 @@ namespace iAcademicGenerator.API.Controllers.UNI
                 });
             }
         }
-        
-        [HttpDelete("delete")]
-        public IActionResult Delete(string rolesCodigo)
+
+
+        [HttpGet("{rolCodigo}/permissions")]
+        public IActionResult GetRolePermissions(string rolCodigo)
         {
-            var result = _UNIservices.RolesDelete(rolesCodigo);
+            var result = _authServices.GetRolePermissions(rolCodigo);
 
             if (result.Success)
                 return Ok(result);
             else
                 return BadRequest(result);
         }
+
+
+
+
     }
 }

@@ -3,7 +3,7 @@ using iAcademicGenerator.Models.Models;
 using Microsoft.Data.SqlClient;
 using System.Data;
 
-namespace iAcademicGenerator.DataAccess.Repositories.UNI
+namespace iAcademicGenerator.DataAccess.Repositories.AUTH
 {
     public class RolesRepository
     {
@@ -18,53 +18,25 @@ namespace iAcademicGenerator.DataAccess.Repositories.UNI
             return result;
         }
 
-        public RequestStatus RolesInsert(RolesDTO rol)
+
+        // Crear rol con permisos
+        public RequestStatus CreateRoleWithPermissions(RoleCreateDTO role)
         {
             var parameter = new DynamicParameters();
 
-            parameter.Add("@rol_nombre", rol.rol_nombre);
-            parameter.Add("@active", rol.active);
-            parameter.Add("@create_at", rol.create_at);
-            parameter.Add("@update_at", rol.update_at);
-            parameter.Add("@create_by", rol.create_by);
-            parameter.Add("@update_by", rol.update_by);
-
-            try
-            {
-                using var db = new SqlConnection(iAcademicGeneratorContext.ConnectionString);
-                db.Execute(ScriptDatabase.SP_RolInsert, parameter, commandType: CommandType.StoredProcedure);
-
-                return new RequestStatus
-                {
-                    CodeStatus = 1,
-                    MessageStatus = "Role inserted successfully"
-                };
-            }
-            catch (Exception ex)
-            {
-                return new RequestStatus
-                {
-                    CodeStatus = 0,
-                    MessageStatus = $"Unexpected error: {ex.Message}"
-                };
-            }
-        }
-
-        public RequestStatus RolesUpdate(RolesDTO rol)
-        {
-            var parameter = new DynamicParameters();
-
-            parameter.Add("@rol_codigo", rol.rol_codigo);
-            parameter.Add("@rol_nombre", rol.rol_nombre);
-            parameter.Add("@active", rol.active);
-            parameter.Add("@update_at", rol.update_at);
-            parameter.Add("@update_by", rol.update_by);
+            parameter.Add("@rol_codigo", role.rol_codigo);
+            parameter.Add("@rol_nombre", role.rol_nombre);
+            // Convertir la lista de permisos a string separado por comas
+            parameter.Add("@permisos", role.permisos != null && role.permisos.Any()
+                ? string.Join(",", role.permisos)
+                : null);
+            parameter.Add("@created_by", role.created_by);
 
             try
             {
                 using var db = new SqlConnection(iAcademicGeneratorContext.ConnectionString);
                 var result = db.QueryFirstOrDefault<RequestStatus>(
-                    ScriptDatabase.SP_RolUpdate,
+                    ScriptDatabase.SP_Rol_CreateWithPermissions,
                     parameter,
                     commandType: CommandType.StoredProcedure
                 );
@@ -72,7 +44,7 @@ namespace iAcademicGenerator.DataAccess.Repositories.UNI
                 return result ?? new RequestStatus
                 {
                     CodeStatus = 0,
-                    MessageStatus = "Unknown error during update"
+                    MessageStatus = "Unknown error during role creation"
                 };
             }
             catch (Exception ex)
@@ -84,6 +56,60 @@ namespace iAcademicGenerator.DataAccess.Repositories.UNI
                 };
             }
         }
+
+        // Actualizar rol con permisos (todo en uno)
+        public RequestStatus UpdateRoleWithPermissions(RoleUpdateDTO role)
+        {
+            var parameter = new DynamicParameters();
+
+            parameter.Add("@rol_codigo", role.rol_codigo);
+            parameter.Add("@rol_nombre", role.rol_nombre);
+            parameter.Add("@permisos", role.permisos != null && role.permisos.Any()
+                ? string.Join(",", role.permisos)
+                : null);
+            parameter.Add("@updated_by", role.updated_by);
+
+            try
+            {
+                using var db = new SqlConnection(iAcademicGeneratorContext.ConnectionString);
+                var result = db.QueryFirstOrDefault<RequestStatus>(
+                    ScriptDatabase.SP_Roles_UpdateWithPermissions,
+                    parameter,
+                    commandType: CommandType.StoredProcedure
+                );
+
+                return result ?? new RequestStatus
+                {
+                    CodeStatus = 0,
+                    MessageStatus = "Unknown error during role update"
+                };
+            }
+            catch (Exception ex)
+            {
+                return new RequestStatus
+                {
+                    CodeStatus = 0,
+                    MessageStatus = $"Unexpected error: {ex.Message}"
+                };
+            }
+        }
+
+
+        public IEnumerable<PermissionWithStatusDTO> GetPermissionsWithStatus(string rolCodigo)
+        {
+            var parameter = new DynamicParameters();
+            parameter.Add("@rol_codigo", rolCodigo);
+
+            using var db = new SqlConnection(iAcademicGeneratorContext.ConnectionString);
+            var result = db.Query<PermissionWithStatusDTO>(
+                ScriptDatabase.SP_Roles_GetPermissionsWithStatus,
+                parameter,
+                commandType: CommandType.StoredProcedure
+            ).ToList();
+
+            return result;
+        }
+
 
         public RequestStatus RolesDelete(string rol_codigo)
         {
