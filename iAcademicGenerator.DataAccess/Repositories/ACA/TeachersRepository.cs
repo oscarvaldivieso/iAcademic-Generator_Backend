@@ -25,12 +25,11 @@ namespace iAcademicGenerator.DataAccess.Repositories.ACA
         {
             var parameter = new DynamicParameters();
 
-            parameter.Add("@ofe_codigo", teachers.ofe_codigo);
             parameter.Add("@doc_codigo", teachers.doc_codigo);
-        
-         
+            parameter.Add("@doc_nombre", teachers.doc_nombre);
+            parameter.Add("@gru_codigo", teachers.gru_codigo);
             parameter.Add("@created_by", teachers.created_by);
-
+                
             try
             {
                 using var db = new SqlConnection(iAcademicGeneratorContext.ConnectionString);
@@ -59,12 +58,9 @@ namespace iAcademicGenerator.DataAccess.Repositories.ACA
         {
             var parameter = new DynamicParameters();
 
-            parameter.Add("@id", teachers.id);
-
-            parameter.Add("@ofe_codigo", teachers.ofe_codigo);
             parameter.Add("@doc_codigo", teachers.doc_codigo);
-       
-
+            parameter.Add("@doc_nombre", teachers.doc_nombre);
+            parameter.Add("@gru_codigo", teachers.gru_codigo);
             parameter.Add("@updated_by", teachers.updated_by);
 
             try
@@ -93,10 +89,10 @@ namespace iAcademicGenerator.DataAccess.Repositories.ACA
         }
 
 
-        public RequestStatus TeacherDelete(int id)
+        public RequestStatus TeacherDelete(int doc_codigo)
         {
             var parameter = new DynamicParameters();
-            parameter.Add("@id", id);
+            parameter.Add("@doc_codigo", doc_codigo);
 
             try
             {

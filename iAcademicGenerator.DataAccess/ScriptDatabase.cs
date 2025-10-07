@@ -112,6 +112,11 @@ namespace iAcademicGenerator.DataAccess
         public static string SP_User_Login = "SEC.SP_User_Login";
         #endregion
 
+        #region Requests
+        public static string SP_RequestsList = "[PRE].[SP_Requests_List]";
+        public static string SP_RequestsInsert = "[PRE].[SP_Requests_Insert]";
+        #endregion
+
 
 
 

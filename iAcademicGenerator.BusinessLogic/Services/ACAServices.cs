@@ -17,16 +17,18 @@ namespace iAcademicGenerator.BusinessLogic.Services
   
         private readonly SubjectsRepository _subjectsRepository;
         private readonly AreasRepository _areasRepository;
+        private readonly RequestsRepository _requestsRepository;
 
         public ACAServices(SectionsRepository sectionsRepository, ClassroomsRepository classroomsRepository,
             TeachersRepository teachersRepository,  
-            SubjectsRepository subjectsRepository, AreasRepository areasRepository )
+            SubjectsRepository subjectsRepository, AreasRepository areasRepository, RequestsRepository requestsRepository )
         {
             _sectionsRepository = sectionsRepository;
             _classroomsRepository = classroomsRepository;
             _teachersRepository = teachersRepository;
             _subjectsRepository = subjectsRepository;
             _areasRepository = areasRepository;
+            _requestsRepository = requestsRepository;
 
         }
 
@@ -448,6 +450,64 @@ namespace iAcademicGenerator.BusinessLogic.Services
             catch (Exception ex)
             {
                 return result.Error($"Unexpected error during Area deletion: {ex.Message}");
+            }
+        }
+        #endregion
+
+        #region Requests
+        public ServiceResult RequestAssignmentInsert(RequestAssignmentDTO request)
+        {
+            var result = new ServiceResult();
+            try
+            {
+                // Validaciones básicas
+                if (request == null)
+                {
+                    return result.Error("Request data is required");
+                }
+
+                if (string.IsNullOrWhiteSpace(request.pre_codest))
+                {
+                    return result.Error("Student code is required");
+                }
+
+                if (string.IsNullOrWhiteSpace(request.created_by))
+                {
+                    return result.Error("Created by is required");
+                }
+
+                if (request.Materias == null || !request.Materias.Any())
+                {
+                    return result.Error("At least one subject is required");
+                }
+
+                // Validar cada materia
+                foreach (var materia in request.Materias)
+                {
+                    if (string.IsNullOrWhiteSpace(materia.mat_codigo))
+                    {
+                        return result.Error("Subject code is required for all subjects");
+                    }
+                    if (string.IsNullOrWhiteSpace(materia.sec_codigo))
+                    {
+                        return result.Error("Section code is required for all subjects");
+                    }
+                }
+
+                var response = _requestsRepository.RequestAssignmentInsert(request);
+
+                if (response.CodeStatus == 1)
+                {
+                    return result.Ok(response);
+                }
+                else
+                {
+                    return result.Error(response);
+                }
+            }
+            catch (Exception ex)
+            {
+                return result.Error($"Unexpected error during Request assignment inserting: {ex.Message}");
             }
         }
         #endregion

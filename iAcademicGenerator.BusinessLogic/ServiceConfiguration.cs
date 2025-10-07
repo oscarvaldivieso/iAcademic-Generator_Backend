@@ -33,6 +33,7 @@ namespace iAcademicGenerator.BusinessLogic
 
             services.AddScoped<SectionsRepository>();
             services.AddScoped<ClassroomsRepository>();
+            services.AddScoped<RequestsRepository>();
             services.AddScoped<TeachersRepository>();
             services.AddScoped<AreasRepository>();
             services.AddScoped<SubjectsRepository>();
@@ -40,6 +41,7 @@ namespace iAcademicGenerator.BusinessLogic
 
             services.AddScoped<StudentsRepository>();
             services.AddScoped<AuthRepository>();
+            
 
         }
 
