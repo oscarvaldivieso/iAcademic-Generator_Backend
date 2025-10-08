@@ -11,8 +11,11 @@ namespace iAcademicGenerator.Models.Models
 
         public string mat_codigo { get; set; }
         public string mat_nombre { get; set; }
+
+        public int mat_anio { get; set; }
+        public int? mat_duracion_clase { get; set; }
+        public int? mat_unidades_valorativas { get; set; }
         public string? are_codigo { get; set; }
-        public int? mat_nivel { get; set; }
         public bool mat_es_core { get; set; }
         public bool active { get; set; }
         public DateTime? created_at { get; set; }

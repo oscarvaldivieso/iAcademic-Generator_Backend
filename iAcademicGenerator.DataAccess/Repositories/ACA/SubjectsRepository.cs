@@ -27,7 +27,6 @@ namespace iAcademicGenerator.DataAccess.Repositories.ACA
 
             parameter.Add("@mat_codigo", subjects.mat_codigo);  
             parameter.Add("@mat_nombre", subjects.mat_nombre);
-            parameter.Add("@mat_nivel", subjects.mat_nivel);
             parameter.Add("@mat_es_core", subjects.mat_es_core);
             parameter.Add("@are_codigo", subjects.are_codigo);
             parameter.Add("@created_by", subjects.created_by);
@@ -62,7 +61,6 @@ namespace iAcademicGenerator.DataAccess.Repositories.ACA
 
             parameter.Add("@mat_codigo", subjects.mat_codigo);
             parameter.Add("@mat_nombre", subjects.mat_nombre);
-            parameter.Add("@mat_nivel", subjects.mat_nivel);
             parameter.Add("@mat_es_core", subjects.mat_es_core);
             parameter.Add("@are_codigo", subjects.are_codigo);
             parameter.Add("@updated_by", subjects.updated_by);
