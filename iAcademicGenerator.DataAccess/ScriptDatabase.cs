@@ -83,6 +83,7 @@ namespace iAcademicGenerator.DataAccess
         public static string SP_TeacherInsert = "[ACA].[SP_Teacher_Insert]";
         public static string SP_TeacherUpdate = "[ACA].[SP_Teacher_Update]";
         public static string SP_TeacherDelete = "[ACA].[SP_Teacher_Delete]";
+        public const string SP_TeachersBulkInsert = "ACA.SP_Teachers_BulkInsert";
         #endregion
 
         #region Classroooms
