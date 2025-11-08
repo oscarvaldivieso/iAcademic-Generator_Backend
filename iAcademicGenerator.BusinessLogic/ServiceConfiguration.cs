@@ -29,8 +29,9 @@ namespace iAcademicGenerator.BusinessLogic
             services.AddScoped<UsersRepository>();
             services.AddScoped<RolRepository>();
             services.AddScoped<RolesRepository>();
-            
+            services.AddScoped<SchedulesRepository>();
 
+            
             services.AddScoped<SectionsRepository>();
             services.AddScoped<ClassroomsRepository>();
             services.AddScoped<RequestsRepository>();

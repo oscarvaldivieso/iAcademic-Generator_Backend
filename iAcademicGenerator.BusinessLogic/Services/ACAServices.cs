@@ -18,10 +18,11 @@ namespace iAcademicGenerator.BusinessLogic.Services
         private readonly SubjectsRepository _subjectsRepository;
         private readonly AreasRepository _areasRepository;
         private readonly RequestsRepository _requestsRepository;
+        private readonly SchedulesRepository _schedulesRepository;
 
         public ACAServices(SectionsRepository sectionsRepository, ClassroomsRepository classroomsRepository,
             TeachersRepository teachersRepository,  
-            SubjectsRepository subjectsRepository, AreasRepository areasRepository, RequestsRepository requestsRepository )
+            SubjectsRepository subjectsRepository, AreasRepository areasRepository, RequestsRepository requestsRepository, SchedulesRepository schedulesRepository )
         {
             _sectionsRepository = sectionsRepository;
             _classroomsRepository = classroomsRepository;
@@ -29,6 +30,7 @@ namespace iAcademicGenerator.BusinessLogic.Services
             _subjectsRepository = subjectsRepository;
             _areasRepository = areasRepository;
             _requestsRepository = requestsRepository;
+            _schedulesRepository = schedulesRepository;
 
         }
 
@@ -511,6 +513,78 @@ namespace iAcademicGenerator.BusinessLogic.Services
             }
         }
         #endregion
+
+        #region Schedules
+        public ServiceResult ListSchedules()
+        {
+            var result = new ServiceResult();
+            try
+            {
+                var response = _schedulesRepository.List();
+                return result.Ok(response);
+            }
+            catch (Exception ex)
+            {
+                return result.Error(ex.Message);
+            }
+        }
+
+        public ServiceResult ScheduleInsert(SchedulesDTO schedule)
+        {
+            var result = new ServiceResult();
+            try
+            {
+                var response = _schedulesRepository.ScheduleInsert(schedule);
+
+                return response.CodeStatus == 1
+                    ? result.Ok(response)
+                    : result.Error(response);
+            }
+            catch (Exception ex)
+            {
+                return result.Error($"Unexpected error during Schedule insert: {ex.Message}");
+            }
+        }
+
+        public ServiceResult ScheduleUpdate(SchedulesDTO schedule)
+        {
+            var result = new ServiceResult();
+            try
+            {
+                var response = _schedulesRepository.ScheduleUpdate(schedule);
+
+                return response.CodeStatus == 1
+                    ? result.Ok(response)
+                    : result.Error(response);
+            }
+            catch (Exception ex)
+            {
+                return result.Error($"Unexpected error during Schedule update: {ex.Message}");
+            }
+        }
+
+        public ServiceResult ScheduleDelete(int horCodigo)
+        {
+            var result = new ServiceResult();
+
+            if (horCodigo <= 0)
+                return result.Error("Schedule code is required for deletion");
+
+            try
+            {
+                var response = _schedulesRepository.ScheduleDelete(horCodigo);
+
+                return response.CodeStatus == 1
+                    ? result.Ok(response)
+                    : result.Error(response);
+            }
+            catch (Exception ex)
+            {
+                return result.Error($"Unexpected error during Schedule deletion: {ex.Message}");
+            }
+        }
+        #endregion
+
 
     }
 }

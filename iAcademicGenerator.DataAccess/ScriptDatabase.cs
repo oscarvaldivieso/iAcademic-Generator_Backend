@@ -117,6 +117,13 @@ namespace iAcademicGenerator.DataAccess
         public static string SP_RequestsInsert = "[PRE].[SP_Requests_Insert]";
         #endregion
 
+        #region Schedules
+        public static string SP_SchedulesList = "[ACA].[SP_Schedules_List]";
+        public static string SP_ScheduleInsert = "[ACA].[SP_Schedule_Insert]";
+        public static string SP_ScheduleUpdate = "[ACA].[SP_Schedule_Update]";
+        public static string SP_ScheduleDelete = "[ACA].[SP_Schedule_Delete]";
+        #endregion
+
 
 
 
