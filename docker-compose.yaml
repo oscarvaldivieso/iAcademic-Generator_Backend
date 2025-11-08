@@ -1,0 +1,48 @@
+version: "3.9"
+
+services:
+  # API principal iAcademicGenerator.API
+  api:
+    container_name: iacademic-api
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      - ASPNETCORE_URLS=http://0.0.0.0:8080
+      - ASPNETCORE_ENVIRONMENT=Development
+      # 🔗 Conexión directa a Somee (DB compartida)
+      - ConnectionStrings__AcademicDb=Server=iAcademicGenerator.mssql.somee.com;Database=iAcademicGenerator;User Id=oscarvaldivieso_SQLLogin_1;Password=admin123;Encrypt=True;TrustServerCertificate=True;MultipleActiveResultSets=True
+    ports:
+      - "5000:8080"    # http://localhost:5000/swagger
+    networks:
+      - backend-net
+    # ❌ Ya no dependemos de sqlserver local
+    # depends_on:
+    #   - sqlserver
+
+  # API de UploadData (carga de Excel → STG.ofertas_raw)
+  upload:
+    container_name: upload-api
+    build:
+      context: .
+      dockerfile: UploadData.API/Dockerfile
+    environment:
+      - ASPNETCORE_URLS=http://0.0.0.0:8080
+      - ASPNETCORE_ENVIRONMENT=Development
+      # 🔗 Conexión directa a Somee (DB compartida)
+      - ConnectionStrings__AcademicDb=Server=iAcademicGenerator.mssql.somee.com;Database=iAcademicGenerator;User Id=oscarvaldivieso_SQLLogin_1;Password=admin123;Encrypt=True;TrustServerCertificate=True;MultipleActiveResultSets=True
+      # (Opcional) claves propias del UploadData si las usas en appsettings
+      - Upload__ConnectionName=AcademicDb
+      - Upload__DestinationTable=STG.ofertas_raw
+      - Upload__MaxFileSizeBytes=200000000
+    ports:
+      - "5001:8080"    # http://localhost:5001/swagger
+    networks:
+      - backend-net
+    # ❌ Ya no dependemos de sqlserver local
+    # depends_on:
+    #   - sqlserver
+
+networks:
+  backend-net:
+    driver: bridge
