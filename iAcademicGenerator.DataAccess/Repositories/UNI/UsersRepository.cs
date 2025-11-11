@@ -26,15 +26,10 @@ namespace iAcademicGenerator.DataAccess.Repositories.UNI
             parameter.Add("@usu_nombre", user.usu_nombre);
             parameter.Add("@usu_password", user.usu_password);
             parameter.Add("@usu_email", user.usu_email);
-            parameter.Add("@usu_activo", user.usu_activo);
-            parameter.Add("@usu_ultimo_login", user.usu_ultimo_login);
-            parameter.Add("@usu_intentos_fallidos", user.usu_intentos_fallidos);
-            parameter.Add("@usu_bloqueado", user.usu_bloqueado);
-            parameter.Add("@active", user.active);
-            parameter.Add("@create_at", user.create_at);
-            parameter.Add("@update_at", user.update_at);
-            parameter.Add("@create_by", user.create_by);
-            parameter.Add("@update_by", user.update_by);
+            parameter.Add("@est_codigo", user.est_codigo);
+            parameter.Add("@doc_codigo", user.doc_codigo);
+                parameter.Add("@created_by", user.created_by);
+      
 
             try
             {
@@ -65,13 +60,10 @@ namespace iAcademicGenerator.DataAccess.Repositories.UNI
             parameter.Add("@usu_nombre", user.usu_nombre);
             parameter.Add("@usu_password", user.usu_password);
             parameter.Add("@usu_email", user.usu_email);
-            parameter.Add("@usu_activo", user.usu_activo);
-            parameter.Add("@usu_ultimo_login", user.usu_ultimo_login);
-            parameter.Add("@usu_intentos_fallidos", user.usu_intentos_fallidos);
-            parameter.Add("@usu_bloqueado", user.usu_bloqueado);
-            parameter.Add("@active", user.active);
-            parameter.Add("@update_at", user.update_at);
-            parameter.Add("@update_by", user.update_by);
+            parameter.Add("@est_codigo", user.est_codigo);
+            parameter.Add("@doc_codigo", user.doc_codigo);
+        
+            parameter.Add("@updated_by", user.updated_by);
 
             try
             {
