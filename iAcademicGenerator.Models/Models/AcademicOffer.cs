@@ -12,7 +12,7 @@ namespace iAcademicGenerator.Models.Models
 
     public class OfferListDTO
     {
-        public string Codigo { get; set; }
+        public string? Codigo { get; set; }
         public string Materia { get; set; }
         public string Dias { get; set; }
         public string Bloque { get; set; }
