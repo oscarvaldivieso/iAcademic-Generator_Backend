@@ -491,13 +491,12 @@ namespace iAcademicGenerator.BusinessLogic.Services
                     {
                         return result.Error("Subject code is required for all subjects");
                     }
-<<<<<<< HEAD
+
                     if (int.IsNegative(materia.hor_codigo))
                     {
                         return result.Error("Section code is required for all subjects");
                     }
-=======
->>>>>>> 1282c5ff9c83eacd215b146af6e43d2445f34bbf
+
                 }
 
                 var response = _requestsRepository.RequestAssignmentInsert(request);
