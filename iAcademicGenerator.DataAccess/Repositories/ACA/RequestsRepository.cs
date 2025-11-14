@@ -21,7 +21,6 @@ namespace iAcademicGenerator.DataAccess.Repositories.ACA
             // Crear DataTable para el TVP
             var materiasTable = new DataTable();
             materiasTable.Columns.Add("mat_codigo", typeof(string));
-            materiasTable.Columns.Add("sec_codigo", typeof(string));
             materiasTable.Columns.Add("doc_codigo", typeof(string));
             materiasTable.Columns.Add("mod_codigo", typeof(string));
             materiasTable.Columns.Add("cam_codigo", typeof(string));
@@ -34,7 +33,6 @@ namespace iAcademicGenerator.DataAccess.Repositories.ACA
             {
                 materiasTable.Rows.Add(
                     materia.mat_codigo,
-                    materia.sec_codigo,
                     materia.doc_codigo,
                     materia.mod_codigo,
                     materia.cam_codigo,
