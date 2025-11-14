@@ -15,13 +15,13 @@ namespace iAcademicGenerator.BusinessLogic.Services
         private readonly CampusRepository _campusRepository;
         private readonly ModalitiesRepository _modalitiesRepository;
         private readonly PeriodsRepository _periodsRepository;
-
+        private readonly OffersRepository _offersRepository;
         private readonly UsersRepository _usersRepository;
         private readonly RolRepository _rolRepository;
         private readonly RolesRepository _rolesRepository;
 
         public UNIServices(CareersRepository careersRepository, CampusRepository campusRepository, ModalitiesRepository modalitiesRepository, PeriodsRepository periodsRepository, UsersRepository usersRepository,
-            RolRepository rolRepository, RolesRepository rolesRepository)
+            RolRepository rolRepository, RolesRepository rolesRepository, OffersRepository offersRepository)
         {
             _careersRepository = careersRepository;
             _campusRepository = campusRepository;
@@ -30,6 +30,7 @@ namespace iAcademicGenerator.BusinessLogic.Services
             _usersRepository = usersRepository;
             _rolRepository = rolRepository;
             _rolesRepository = rolesRepository;
+            _offersRepository = offersRepository;
         }
 
         #region Careers
@@ -506,6 +507,25 @@ namespace iAcademicGenerator.BusinessLogic.Services
             catch (Exception ex)
             {
                 return result.Error($"Unexpected error during rol deletion: {ex.Message}");
+            }
+        }
+        #endregion
+
+
+        #region Offers
+
+        public ServiceResult AcademicOfferList()
+        {
+            var result = new ServiceResult();
+
+            try
+            {
+                var response = _offersRepository.List();
+                return result.Ok(response);
+            }
+            catch (Exception ex)
+            {
+                return result.Error($"Error listing academic offer: {ex.Message}");
             }
         }
         #endregion

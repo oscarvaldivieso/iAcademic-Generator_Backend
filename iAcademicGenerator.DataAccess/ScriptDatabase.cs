@@ -126,6 +126,11 @@ namespace iAcademicGenerator.DataAccess
         #endregion
 
 
+        #region Offers
+        public static string SP_OfferList = "[ML].[SP_AcademicOffer_List]";
+        #endregion
+
+
 
 
 
