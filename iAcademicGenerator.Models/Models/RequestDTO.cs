@@ -17,7 +17,7 @@ namespace iAcademicGenerator.Models.Models
     public class RequestAssignmentItemDTO
     {
         public string mat_codigo { get; set; }
-        public string sec_codigo { get; set; }
+        public int hor_codigo { get; set; }
         public string doc_codigo { get; set; }
         public string mod_codigo { get; set; }
         public string cam_codigo { get; set; }
