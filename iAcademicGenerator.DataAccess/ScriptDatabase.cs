@@ -116,6 +116,7 @@ namespace iAcademicGenerator.DataAccess
         #region Requests
         public static string SP_RequestsList = "[PRE].[SP_Requests_List]";
         public static string SP_RequestsInsert = "[PRE].[SP_Requests_Insert]";
+        public const string SP_RequestsStudent_List = "[PRE].[SP_RequestsStudent_List]";
         #endregion
 
         #region Schedules

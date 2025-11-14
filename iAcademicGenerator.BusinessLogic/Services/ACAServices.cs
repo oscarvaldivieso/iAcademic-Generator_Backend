@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static iAcademicGenerator.DataAccess.Repositories.ACA.RequestsRepository;
 
 namespace iAcademicGenerator.BusinessLogic.Services
 {
@@ -515,6 +516,26 @@ namespace iAcademicGenerator.BusinessLogic.Services
                 return result.Error($"Unexpected error during Request assignment inserting: {ex.Message}");
             }
         }
+
+        public ServiceResult RequestsStudentList(string est_codigo)
+        {
+            var result = new ServiceResult();
+
+            if (string.IsNullOrWhiteSpace(est_codigo))
+                return result.Error("Student code is required.");
+
+            try
+            {
+                var response = _requestsRepository.List(est_codigo);
+                return result.Ok(response);
+            }
+            catch (Exception ex)
+            {
+                return result.Error($"Error listing student requests: {ex.Message}");
+            }
+        }
+
+
         #endregion
 
         #region Schedules

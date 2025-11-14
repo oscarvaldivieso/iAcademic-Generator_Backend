@@ -51,7 +51,7 @@ namespace iAcademicGenerator.BusinessLogic
         {
             services.AddScoped<UNIServices>();
             services.AddScoped<ACAServices>();
-              services.AddScoped<EXPServices>();
+            services.AddScoped<EXPServices>();
             services.AddScoped<AuthServices>();
         }
 

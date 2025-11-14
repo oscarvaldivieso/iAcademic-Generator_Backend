@@ -12,6 +12,23 @@ namespace iAcademicGenerator.DataAccess.Repositories.ACA
 {
     public class RequestsRepository
     {
+
+        public IEnumerable<RequestStudentListDTO> List(string est_codigo)
+        {
+            var parameter = new DynamicParameters();
+            parameter.Add("@est_codigo", est_codigo);
+
+            using var db = new SqlConnection(iAcademicGeneratorContext.ConnectionString);
+
+            var result = db.Query<RequestStudentListDTO>(
+                ScriptDatabase.SP_RequestsStudent_List,
+                parameter,
+                commandType: CommandType.StoredProcedure
+            ).ToList();
+
+            return result;
+        }
+
         public RequestStatus RequestAssignmentInsert(RequestAssignmentDTO request)
         {
             var parameter = new DynamicParameters();
