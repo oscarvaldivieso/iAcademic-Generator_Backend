@@ -42,6 +42,7 @@ namespace iAcademicGenerator.BusinessLogic
 
             services.AddScoped<StudentsRepository>();
             services.AddScoped<AuthRepository>();
+            services.AddScoped<OffersRepository>();
             
 
         }
