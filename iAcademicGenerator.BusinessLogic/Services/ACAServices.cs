@@ -490,10 +490,6 @@ namespace iAcademicGenerator.BusinessLogic.Services
                     {
                         return result.Error("Subject code is required for all subjects");
                     }
-                    if (string.IsNullOrWhiteSpace(materia.sec_codigo))
-                    {
-                        return result.Error("Section code is required for all subjects");
-                    }
                 }
 
                 var response = _requestsRepository.RequestAssignmentInsert(request);
