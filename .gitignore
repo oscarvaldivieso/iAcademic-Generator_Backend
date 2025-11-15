@@ -399,3 +399,8 @@ FodyWeavers.xsd
 
 # JetBrains Rider
 *.sln.iml
+
+# ML build artifacts
+ML/ml/IGCP.ML/bin/
+ML/ml/IGCP.ML/obj/
+ML/ml/IGCP.ML/out/
