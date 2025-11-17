@@ -5,6 +5,7 @@ using System.Data;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Data.SqlClient;
 using Microsoft.ML;
@@ -38,12 +39,17 @@ namespace AcademicOfferPredictor
         {
             try
             {
+                // Si viene el periodo por args, úsalo; si no, usa uno por defecto
+                var targetPer = args.Length > 0 && !string.IsNullOrWhiteSpace(args[0])
+                    ? args[0]
+                    : "20254";
+
                 var predictor = new OfferPredictor(
                     CONN, SOURCE_VIEW, OPEN_THRESHOLD, SIGMA,
                     NUMBER_OF_LEAVES, MIN_EXAMPLE_COUNT, NUMBER_OF_BITS,
                     BULK_BATCH_SIZE, RESULT_TABLE, SAVE_MODEL);
 
-                await predictor.RunAutoAsync();
+                await predictor.RunAutoAsync(targetPer);
                 return 0;
             }
             catch (Exception ex)
@@ -58,6 +64,9 @@ namespace AcademicOfferPredictor
 
     public class OfferPredictor
     {
+        // Evitar ejecuciones simultáneas (API o consola)
+        private static readonly SemaphoreSlim _runLock = new(1, 1);
+
         private readonly string _conn;
         private readonly string _sourceView;
         private readonly float _openThreshold;
@@ -100,35 +109,48 @@ namespace AcademicOfferPredictor
             _ml = new MLContext(seed: 42);
         }
 
-        public async Task RunAutoAsync()
+        // AHORA RECIBE EL PERIODO
+        public async Task RunAutoAsync(string targetPer)
         {
-            var targetPer = "20254";
-            var runTag = $"{targetPer}-Q4-{DateTime.Now:yyyyMMdd-HHmmss}";
+            // Evita que se ejecute en paralelo
+            if (!await _runLock.WaitAsync(0))
+            {
+                throw new InvalidOperationException("Ya hay una ejecución en progreso. Intenta más tarde.");
+            }
 
-            Console.WriteLine($"Fuente: {_sourceView}  Periodo objetivo: {targetPer}");
+            try
+            {
+                var runTag = $"{targetPer}-Q4-{DateTime.Now:yyyyMMdd-HHmmss}";
 
-            var trainRows = await LoadTrainingDataAsync();
-            var predRows  = await LoadPredictionDataAsync(targetPer);
-            ValidateData(trainRows, predRows);
+                Console.WriteLine($"Fuente: {_sourceView}  Periodo objetivo: {targetPer}");
 
-            var trainFeatures = trainRows.Select(MapToTrainFeatures).ToList();
-            var predFeatures  = predRows.Select(MapToPredictFeatures).ToList();
+                var trainRows = await LoadTrainingDataAsync();
+                var predRows = await LoadPredictionDataAsync(targetPer);
+                ValidateData(trainRows, predRows);
 
-            var trainData = _ml.Data.LoadFromEnumerable(trainFeatures);
-            var predData  = _ml.Data.LoadFromEnumerable(predFeatures);
+                var trainFeatures = trainRows.Select(MapToTrainFeatures).ToList();
+                var predFeatures = predRows.Select(MapToPredictFeatures).ToList();
 
-            var model = TrainRegressionModel(trainData);
-            EvaluateModel(model, trainData);
+                var trainData = _ml.Data.LoadFromEnumerable(trainFeatures);
+                var predData = _ml.Data.LoadFromEnumerable(predFeatures);
 
-            var predictions = PredictEnrollments(model, predData);
+                var model = TrainRegressionModel(trainData);
+                EvaluateModel(model, trainData);
 
-            var outFile = Path.Combine(_outputDir, $"pred_ofertas_{targetPer}_{DateTime.Now:yyyyMMdd_HHmmss}.csv");
-            await ExportResultsAsync(predFeatures, predictions, outFile);
-            await SaveResultsToDatabaseAsync(runTag, predFeatures, predictions);
+                var predictions = PredictEnrollments(model, predData);
 
-            if (_saveModel) SaveModel(model, trainData);
+                var outFile = Path.Combine(_outputDir, $"pred_ofertas_{targetPer}_{DateTime.Now:yyyyMMdd_HHmmss}.csv");
+                await ExportResultsAsync(predFeatures, predictions, outFile);
+                await SaveResultsToDatabaseAsync(runTag, predFeatures, predictions);
 
-            Console.WriteLine($"OK → {predictions.Count} filas. CSV: {outFile}  RunTag: {runTag}");
+                if (_saveModel) SaveModel(model, trainData);
+
+                Console.WriteLine($"OK → {predictions.Count} filas. CSV: {outFile}  RunTag: {runTag}");
+            }
+            finally
+            {
+                _runLock.Release();
+            }
         }
 
         // ===================== CARGA TRAIN (ENRICHED) =====================
@@ -195,8 +217,8 @@ FROM {_sourceView};";
                     OfeDuracionClase = GetInt(rd, "ofe_duracion_clase"),
                     OfeEsCore = GetInt(rd, "ofe_es_core"),
 
-                    DiasPattern = GetString(rd, "dias_pattern","NA"),
-                    BloqueHorario = GetString(rd, "bloque_horario","NA"),
+                    DiasPattern = GetString(rd, "dias_pattern", "NA"),
+                    BloqueHorario = GetString(rd, "bloque_horario", "NA"),
                     IsVirtual = GetInt(rd, "is_virtual"),
 
                     DiasCount = GetInt(rd, "dias_count"),
@@ -210,10 +232,10 @@ FROM {_sourceView};";
                     HasWeekend = GetInt(rd, "has_weekend"),
 
                     PreSolicitudes = GetInt(rd, "pre_solicitudes"),
-                    OfeModalidadPrograma = GetString(rd, "ofe_modalidad_programa","PRESENCIAL"),
+                    OfeModalidadPrograma = GetString(rd, "ofe_modalidad_programa", "PRESENCIAL"),
 
                     OfeMatriculados = GetInt(rd, "ofe_matriculados"),
-                    HoraInicio = GetString(rd, "hora_inicio","")
+                    HoraInicio = GetString(rd, "hora_inicio", "")
                 });
             }
             Console.WriteLine($"   → Train: {list.Count}");
@@ -273,7 +295,7 @@ SELECT
   l.ofe_presencialidad_obligatoria, l.ofe_duracion_clase, l.ofe_es_core,
 
   COALESCE(l.hora_inicio,   mh.hora_inicio)          AS hora_inicio,
-  COALESCE(l.dias_pattern,  md.dias_pattern, 'NA')   AS dias_pattern,
+  COALESCE(l.dias_pattern,  md.dias_pattern, 'NA')   As dias_pattern,
   COALESCE(l.bloque_horario,mb.bloque_horario, 'NA') AS bloque_horario,
 
   l.is_virtual,
@@ -294,7 +316,7 @@ OUTER APPLY (
 OUTER APPLY (
   SELECT TOP (1) bq.bloque_horario
   FROM (
-    SELECT bloque_horario, COUNT(*) AS cnt, MAX(TRY_CONVERT(int, per_codigo)) AS last_per
+    SELECT bloque_horario, COUNT(*) As cnt, MAX(TRY_CONVERT(int, per_codigo)) AS last_per
     FROM base b2
     WHERE b2.mod_codigo = l.mod_codigo AND b2.cam_codigo = l.cam_codigo
           AND b2.bloque_horario IS NOT NULL
@@ -343,9 +365,9 @@ ORDER BY l.mod_codigo, l.cam_codigo,
                     OfeDuracionClase = GetInt(rd, "ofe_duracion_clase"),
                     OfeEsCore = GetInt(rd, "ofe_es_core"),
 
-                    HoraInicio = GetString(rd, "hora_inicio",""),
-                    DiasPattern = GetString(rd, "dias_pattern","NA"),
-                    BloqueHorario = GetString(rd, "bloque_horario","NA"),
+                    HoraInicio = GetString(rd, "hora_inicio", ""),
+                    DiasPattern = GetString(rd, "dias_pattern", "NA"),
+                    BloqueHorario = GetString(rd, "bloque_horario", "NA"),
                     IsVirtual = GetInt(rd, "is_virtual"),
 
                     DiasCount = GetInt(rd, "dias_count"),
@@ -359,7 +381,7 @@ ORDER BY l.mod_codigo, l.cam_codigo,
                     HasWeekend = GetInt(rd, "has_weekend"),
 
                     PreSolicitudes = GetInt(rd, "pre_solicitudes"),
-                    OfeModalidadPrograma = GetString(rd, "ofe_modalidad_programa","PRESENCIAL")
+                    OfeModalidadPrograma = GetString(rd, "ofe_modalidad_programa", "PRESENCIAL")
                 });
             }
             Console.WriteLine($"   → Predict candidates: {list.Count}");
@@ -416,14 +438,13 @@ ORDER BY l.mod_codigo, l.cam_codigo,
                 .Append(_ml.Transforms.NormalizeMinMax("Features"))
                 .Append(_ml.Transforms.CopyColumns("Label", nameof(MLFeatures.OfeMatriculados)));
 
-var trainer = _ml.Regression.Trainers.LightGbm(
-    labelColumnName: "Label",
-    featureColumnName: "Features",
-    numberOfLeaves: _numberOfLeaves,           // <-- CORRECTO
-    minimumExampleCountPerLeaf: _minExampleCount,
-    numberOfIterations: 300,
-    learningRate: 0.1);
-
+            var trainer = _ml.Regression.Trainers.LightGbm(
+                labelColumnName: "Label",
+                featureColumnName: "Features",
+                numberOfLeaves: _numberOfLeaves,
+                minimumExampleCountPerLeaf: _minExampleCount,
+                numberOfIterations: 300,
+                learningRate: 0.1);
 
             var model = (preprocess.Append(trainer)).Fit(trainData);
             Console.WriteLine("   → Modelo LightGBM entrenado");
@@ -521,7 +542,11 @@ var trainer = _ml.Regression.Trainers.LightGbm(
                 await tx.CommitAsync();
                 Console.WriteLine($"   → Guardados {dt.Rows.Count} en {_resultTable}");
             }
-            catch { await tx.RollbackAsync(); throw; }
+            catch
+            {
+                await tx.RollbackAsync();
+                throw;
+            }
         }
 
         private void MapBulkCopyColumns(SqlBulkCopy bulk)

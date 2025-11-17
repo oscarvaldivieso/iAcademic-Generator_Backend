@@ -1,30 +1,50 @@
-using AcademicOfferPredictor.API.Services.Interfaces;
+using AcademicOfferPredictor; // OfferPredictor del proyecto ML
 using AcademicOfferPredictor.API.Services.Implementation;
+using AcademicOfferPredictor.API.Services.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// 1) Servicios
+// ====== Services ======
 builder.Services.AddControllers();
 
-// OpenAPI integrado en .NET (sin Swashbuckle)
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddOpenApi();
+// CORS simple para pruebas
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAll", policy =>
+    {
+        policy.AllowAnyOrigin()
+              .AllowAnyMethod()
+              .AllowAnyHeader();
+    });
+});
 
-// Servicio dummy del ML
+// Connection string desde appsettings.json
+var connString = builder.Configuration.GetConnectionString("AcademicDb")!;
+
+// OfferPredictor de ML como singleton (usa tu clase grande)
+builder.Services.AddSingleton(sp =>
+    new OfferPredictor(
+        connectionString: connString,
+        sourceView: "STG.vw_ofertas_enriched",
+        openThreshold: 12f,
+        sigma: 5f,
+        numberOfLeaves: 64,
+        minExampleCount: 10,
+        numberOfBits: 15,
+        bulkBatchSize: 1000,
+        resultTable: "ML.pred_ofertas_resultados",
+        saveModel: true
+    )
+);
+
+// Servicio de API que envuelve al predictor
 builder.Services.AddScoped<IOfferPredictorService, OfferPredictorService>();
 
 var app = builder.Build();
 
-// 2) Pipeline HTTP
-if (app.Environment.IsDevelopment())
-{
-    // Expone el documento OpenAPI en /openapi/v1.json
-    app.MapOpenApi();
-}
+// ====== Middleware ======
+app.UseCors("AllowAll");
 
-app.UseHttpsRedirection();
-
-// 3) Controllers
 app.MapControllers();
 
 app.Run();

@@ -1,52 +1,39 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-using AcademicOfferPredictor;                      // <- Proyecto ML
+using AcademicOfferPredictor;                      // Proyecto ML (OfferPredictor)
 using AcademicOfferPredictor.API.Models;
 using AcademicOfferPredictor.API.Services.Interfaces;
+using Microsoft.Extensions.Logging;
 
 namespace AcademicOfferPredictor.API.Services.Implementation
 {
     public class OfferPredictorService : IOfferPredictorService
     {
+        private readonly OfferPredictor _predictor;
+        private readonly ILogger<OfferPredictorService> _logger;
+
+        public OfferPredictorService(
+            OfferPredictor predictor,
+            ILogger<OfferPredictorService> logger)
+        {
+            _predictor = predictor;
+            _logger = logger;
+        }
+
         public async Task<PredictionRunResult> RunAsync(string period, CancellationToken ct = default)
         {
-            const string connectionString =
-                "Server=iAcademicGenerator.mssql.somee.com;Database=iAcademicGenerator;User Id=oscarvaldivieso_SQLLogin_1;Password=admin123;Encrypt=True;TrustServerCertificate=True;MultipleActiveResultSets=True";
+            _logger.LogInformation("[ML] Ejecutando predictor real para periodo {Period}...", period);
 
-            const string sourceView = "STG.vw_ofertas_enriched";
-            const float openThreshold = 12f;
-            const float sigma = 5f;
-            const int numberOfLeaves = 64;
-            const int minExampleCount = 10;
-            const int numberOfBits = 15;
-            const int bulkBatchSize = 1000;
-            const string resultTable = "ML.pred_ofertas_resultados";
-            const bool saveModel = true;
+            // Ahora tu OfferPredictor ya recibe el periodo:
+            await _predictor.RunAutoAsync(period);
 
-            // Instanciamos tu motor real de ML.NET
-            var predictor = new OfferPredictor(
-                connectionString,
-                sourceView,
-                openThreshold,
-                sigma,
-                numberOfLeaves,
-                minExampleCount,
-                numberOfBits,
-                bulkBatchSize,
-                resultTable,
-                saveModel);
-
-            // OJO: por ahora RunAutoAsync sigue usando internamente "20254".
-            // Más adelante lo modificamos para aceptar el periodo como parámetro.
-            Console.WriteLine($"[ML] Ejecutando predictor real para periodo {period}...");
-            await predictor.RunAutoAsync();
-            Console.WriteLine("[ML] Ejecución completada.");
+            _logger.LogInformation("[ML] Ejecución completada para periodo {Period}.", period);
 
             var now = DateTime.Now;
             var runTag = $"{period}-API-{now:yyyyMMdd-HHmmss}";
 
-            // De momento devolvemos métricas dummy, luego las sacamos del modelo si las exponemos.
+            // De momento dejamos métricas dummy
             var metrics = new
             {
                 RMSE = 0.0,

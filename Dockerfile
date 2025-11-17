@@ -11,8 +11,8 @@ COPY iAcademicGenerator.BusinessLogic/*.csproj ./iAcademicGenerator.BusinessLogi
 COPY iAcademicGenerator.DataAccess/*.csproj ./iAcademicGenerator.DataAccess/
 COPY iAcademicGenerator.Models/*.csproj ./iAcademicGenerator.Models/
 
-# Restaurar paquetes NuGet
-RUN dotnet restore
+# Restaurar solo la API principal (y sus proyectos referenciados)
+RUN dotnet restore "iAcademicGenerator.API/iAcademicGenerator.API.csproj"
 
 # Copiar todo el código fuente
 COPY . .
