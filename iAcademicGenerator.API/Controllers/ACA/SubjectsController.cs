@@ -32,6 +32,17 @@ namespace iAcademicGenerator.API.Controllers.ACA
             }
         }
 
+
+        [HttpGet("career-subjects/{est_codigo}/{car_codigo}")]
+        public IActionResult ListCareerSubjects(string est_codigo, string car_codigo)
+        {
+            if (string.IsNullOrWhiteSpace(est_codigo) || string.IsNullOrWhiteSpace(car_codigo))
+                return BadRequest("Student code and career code are required.");
+
+            var result = _ACAservices.ListCareerSubjects(est_codigo, car_codigo);
+            return Ok(result);
+        }
+
         [HttpPost("Create")]
         public IActionResult Create([FromBody] SubjectDTO subjects)
         {

@@ -122,6 +122,24 @@ namespace iAcademicGenerator.DataAccess.Repositories.ACA
         }
 
 
+        public IEnumerable<CareerSubjectsDTO> CareerSubjectsList(string est_codigo, string car_codigo)
+        {
+            using var db = new SqlConnection(iAcademicGeneratorContext.ConnectionString);
+
+            var parameters = new DynamicParameters();
+            parameters.Add("@est_codigo", est_codigo);
+            parameters.Add("@car_codigo", car_codigo);
+
+            var result = db.Query<CareerSubjectsDTO>(
+                ScriptDatabase.SP_CareerSubjectsList,
+                parameters,
+                commandType: CommandType.StoredProcedure
+            ).ToList();
+
+            return result;
+        }
+
+
 
     }
 }

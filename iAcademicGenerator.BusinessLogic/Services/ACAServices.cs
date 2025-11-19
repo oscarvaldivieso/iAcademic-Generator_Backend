@@ -301,6 +301,10 @@ namespace iAcademicGenerator.BusinessLogic.Services
         #endregion
 
         #region Subjects
+
+      
+
+
         public ServiceResult ListSubjects()
         {
             var result = new ServiceResult();
@@ -374,6 +378,26 @@ namespace iAcademicGenerator.BusinessLogic.Services
             catch (Exception ex)
             {
                 return result.Error($"Unexpected error during Subject deletion: {ex.Message}");
+            }
+        }
+
+
+
+        public ServiceResult ListCareerSubjects(string est_codigo, string car_codigo)
+        {
+            var result = new ServiceResult();
+
+            if (string.IsNullOrWhiteSpace(est_codigo) || string.IsNullOrWhiteSpace(car_codigo))
+                return result.Error("Student code and career code are required");
+
+            try
+            {
+                var response = _subjectsRepository.CareerSubjectsList(est_codigo, car_codigo);
+                return result.Ok(response);
+            }
+            catch (Exception ex)
+            {
+                return result.Error($"Unexpected error during Career Subjects listing: {ex.Message}");
             }
         }
         #endregion

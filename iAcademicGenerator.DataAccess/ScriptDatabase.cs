@@ -98,6 +98,7 @@ namespace iAcademicGenerator.DataAccess
         public static string SP_SubjectInsert = "[ACA].[SP_Subject_Insert]";
         public static string SP_SubjectUpdate = "[ACA].[SP_Subject_Update]";
         public static string SP_SubjectDelete = "[ACA].[SP_Subject_Delete]";
+        public static string SP_CareerSubjectsList = "[ACA].[SP_CareerSubjects_List]";
         #endregion
 
         #region Students
