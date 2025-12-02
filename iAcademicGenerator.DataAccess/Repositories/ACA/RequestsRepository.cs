@@ -12,6 +12,23 @@ namespace iAcademicGenerator.DataAccess.Repositories.ACA
 {
     public class RequestsRepository
     {
+
+        public IEnumerable<RequestStudentListDTO> List(string est_codigo)
+        {
+            var parameter = new DynamicParameters();
+            parameter.Add("@est_codigo", est_codigo);
+
+            using var db = new SqlConnection(iAcademicGeneratorContext.ConnectionString);
+
+            var result = db.Query<RequestStudentListDTO>(
+                ScriptDatabase.SP_RequestsStudent_List,
+                parameter,
+                commandType: CommandType.StoredProcedure
+            ).ToList();
+
+            return result;
+        }
+
         public RequestStatus RequestAssignmentInsert(RequestAssignmentDTO request)
         {
             var parameter = new DynamicParameters();
@@ -21,10 +38,12 @@ namespace iAcademicGenerator.DataAccess.Repositories.ACA
             // Crear DataTable para el TVP
             var materiasTable = new DataTable();
             materiasTable.Columns.Add("mat_codigo", typeof(string));
-            materiasTable.Columns.Add("sec_codigo", typeof(string));
+
             materiasTable.Columns.Add("doc_codigo", typeof(string));
+        
             materiasTable.Columns.Add("mod_codigo", typeof(string));
             materiasTable.Columns.Add("cam_codigo", typeof(string));
+            materiasTable.Columns.Add("hor_codigo", typeof(int));
             materiasTable.Columns.Add("per_codigo", typeof(string));
             materiasTable.Columns.Add("pre_prioridad", typeof(int));
             materiasTable.Columns.Add("pre_observacion", typeof(string));
@@ -34,10 +53,12 @@ namespace iAcademicGenerator.DataAccess.Repositories.ACA
             {
                 materiasTable.Rows.Add(
                     materia.mat_codigo,
-                    materia.sec_codigo,
+
                     materia.doc_codigo,
+                
                     materia.mod_codigo,
                     materia.cam_codigo,
+                        materia.hor_codigo,
                     materia.per_codigo,
                     materia.pre_prioridad,
                     materia.pre_observacion
@@ -46,7 +67,7 @@ namespace iAcademicGenerator.DataAccess.Repositories.ACA
 
             // Agregar el parámetro de tipo tabla
             parameter.Add("@Materias", materiasTable.AsTableValuedParameter("[PRE].[TVP_RequestAssignment]"));
-
+             
             try
             {
                 using var db = new SqlConnection(iAcademicGeneratorContext.ConnectionString);

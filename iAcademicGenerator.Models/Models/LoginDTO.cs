@@ -25,6 +25,7 @@ namespace iAcademicGenerator.Models.Models
         public string tipo_usuario { get; set; }
         public string est_codigo { get; set; }
         public string doc_codigo { get; set; }
+        public string car_codigo { get; set; }
         public string roles { get; set; }
         public DateTime? usu_ultimo_login { get; set; }
         public int? intentos_restantes { get; set; }
@@ -37,6 +38,7 @@ namespace iAcademicGenerator.Models.Models
         public string usu_codigo { get; set; }
         public string usu_nombre { get; set; }
         public string usu_email { get; set; }
+        public string car_codigo { get; set; }
         public string tipo_usuario { get; set; }
         public string roles { get; set; }
         public DateTime expires_at { get; set; }

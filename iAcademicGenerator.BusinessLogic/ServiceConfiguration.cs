@@ -29,8 +29,9 @@ namespace iAcademicGenerator.BusinessLogic
             services.AddScoped<UsersRepository>();
             services.AddScoped<RolRepository>();
             services.AddScoped<RolesRepository>();
-            
+            services.AddScoped<SchedulesRepository>();
 
+            
             services.AddScoped<SectionsRepository>();
             services.AddScoped<ClassroomsRepository>();
             services.AddScoped<RequestsRepository>();
@@ -41,6 +42,7 @@ namespace iAcademicGenerator.BusinessLogic
 
             services.AddScoped<StudentsRepository>();
             services.AddScoped<AuthRepository>();
+            services.AddScoped<OffersRepository>();
             
 
         }
@@ -49,7 +51,7 @@ namespace iAcademicGenerator.BusinessLogic
         {
             services.AddScoped<UNIServices>();
             services.AddScoped<ACAServices>();
-              services.AddScoped<EXPServices>();
+            services.AddScoped<EXPServices>();
             services.AddScoped<AuthServices>();
         }
 

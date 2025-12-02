@@ -58,6 +58,7 @@ namespace iAcademicGenerator.BusinessLogic.Services
                             usu_nombre = loginResponse.usu_nombre,
                             usu_email = loginResponse.usu_email,
                             tipo_usuario = loginResponse.tipo_usuario,
+                            car_codigo = loginResponse.car_codigo,
                             roles = loginResponse.roles,
                             expires_at = DateTime.UtcNow.AddHours(JwtSettings.ExpirationHours)
                         };

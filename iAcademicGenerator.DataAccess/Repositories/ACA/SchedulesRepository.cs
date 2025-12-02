@@ -10,37 +10,35 @@ using System.Threading.Tasks;
 
 namespace iAcademicGenerator.DataAccess.Repositories.ACA
 {
-    public class SubjectsRepository
+    public class SchedulesRepository
     {
-
-        public IEnumerable<SubjectDTO> List()
+        public IEnumerable<SchedulesDTO> List()
         {
             using var db = new SqlConnection(iAcademicGeneratorContext.ConnectionString);
-            var result = db.Query<SubjectDTO>(ScriptDatabase.SP_SubjectsList, commandType: System.Data.CommandType.StoredProcedure).ToList();
-
+            var result = db.Query<SchedulesDTO>(ScriptDatabase.SP_SchedulesList, commandType: CommandType.StoredProcedure).ToList();
             return result;
         }
 
-        public RequestStatus SubjectInsert(SubjectDTO subjects)
+        public RequestStatus ScheduleInsert(SchedulesDTO schedule)
         {
-            var parameter = new DynamicParameters();
+            var parameters = new DynamicParameters();
 
-            parameter.Add("@mat_codigo", subjects.mat_codigo);  
-            parameter.Add("@mat_nombre", subjects.mat_nombre);
-            parameter.Add("@mat_es_core", subjects.mat_es_core);
-            parameter.Add("@are_codigo", subjects.are_codigo);
-            parameter.Add("@created_by", subjects.created_by);
+            parameters.Add("@hor_dia_semana", schedule.hor_dia_semana);
+            parameters.Add("@hor_hora_inicio", schedule.hor_hora_inicio);
+            parameters.Add("@hor_hora_fin", schedule.hor_hora_fin);
+            parameters.Add("@hor_duracion_minutos", schedule.hor_duracion_minutos);
+            parameters.Add("@hor_dia_semana_nombre", schedule.hor_dia_semana_nombre);
+            parameters.Add("@created_by", schedule.created_by);
 
             try
             {
                 using var db = new SqlConnection(iAcademicGeneratorContext.ConnectionString);
-                db.Execute(ScriptDatabase.SP_SubjectInsert, parameter, commandType: CommandType.StoredProcedure);
-
+                db.Execute(ScriptDatabase.SP_ScheduleInsert, parameters, commandType: CommandType.StoredProcedure);
 
                 return new RequestStatus
                 {
                     CodeStatus = 1,
-                    MessageStatus = "Subject inserted succesfully"
+                    MessageStatus = "Schedule inserted successfully"
                 };
             }
             catch (Exception ex)
@@ -53,24 +51,24 @@ namespace iAcademicGenerator.DataAccess.Repositories.ACA
             }
         }
 
-
-
-        public RequestStatus SubjectUpdate(SubjectDTO subjects)
+        public RequestStatus ScheduleUpdate(SchedulesDTO schedule)
         {
-            var parameter = new DynamicParameters();
+            var parameters = new DynamicParameters();
 
-            parameter.Add("@mat_codigo", subjects.mat_codigo);
-            parameter.Add("@mat_nombre", subjects.mat_nombre);
-            parameter.Add("@mat_es_core", subjects.mat_es_core);
-            parameter.Add("@are_codigo", subjects.are_codigo);
-            parameter.Add("@updated_by", subjects.updated_by);
+            parameters.Add("@hor_codigo", schedule.hor_codigo);
+            parameters.Add("@hor_dia_semana", schedule.hor_dia_semana);
+            parameters.Add("@hor_hora_inicio", schedule.hor_hora_inicio);
+            parameters.Add("@hor_hora_fin", schedule.hor_hora_fin);
+            parameters.Add("@hor_duracion_minutos", schedule.hor_duracion_minutos);
+            parameters.Add("@hor_dia_semana_nombre", schedule.hor_dia_semana_nombre);
+            parameters.Add("@updated_by", schedule.updated_by);
 
             try
             {
                 using var db = new SqlConnection(iAcademicGeneratorContext.ConnectionString);
                 var result = db.QueryFirstOrDefault<RequestStatus>(
-                    ScriptDatabase.SP_SubjectUpdate,
-                    parameter,
+                    ScriptDatabase.SP_ScheduleUpdate,
+                    parameters,
                     commandType: CommandType.StoredProcedure
                 );
 
@@ -90,18 +88,17 @@ namespace iAcademicGenerator.DataAccess.Repositories.ACA
             }
         }
 
-
-        public RequestStatus SubjectDelete(string mat_codigo)
+        public RequestStatus ScheduleDelete(int horCodigo)
         {
-            var parameter = new DynamicParameters();
-            parameter.Add("@mat_codigo", mat_codigo);
+            var parameters = new DynamicParameters();
+            parameters.Add("@hor_codigo", horCodigo);
 
             try
             {
                 using var db = new SqlConnection(iAcademicGeneratorContext.ConnectionString);
                 var result = db.QueryFirstOrDefault<RequestStatus>(
-                    ScriptDatabase.SP_SubjectDelete,
-                    parameter,
+                    ScriptDatabase.SP_ScheduleDelete,
+                    parameters,
                     commandType: CommandType.StoredProcedure
                 );
 
@@ -120,26 +117,5 @@ namespace iAcademicGenerator.DataAccess.Repositories.ACA
                 };
             }
         }
-
-
-        public IEnumerable<CareerSubjectsDTO> CareerSubjectsList(string est_codigo, string car_codigo)
-        {
-            using var db = new SqlConnection(iAcademicGeneratorContext.ConnectionString);
-
-            var parameters = new DynamicParameters();
-            parameters.Add("@est_codigo", est_codigo);
-            parameters.Add("@car_codigo", car_codigo);
-
-            var result = db.Query<CareerSubjectsDTO>(
-                ScriptDatabase.SP_CareerSubjectsList,
-                parameters,
-                commandType: CommandType.StoredProcedure
-            ).ToList();
-
-            return result;
-        }
-
-
-
     }
 }

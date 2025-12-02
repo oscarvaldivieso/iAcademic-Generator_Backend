@@ -17,10 +17,10 @@ namespace iAcademicGenerator.DataAccess
         public static string SP_CareerDelete = "[UNI].[SP_Career_Delete]";
         #endregion
 
-        public static string SP_UsersList = "sp_Users_List";
-        public static string SP_UserInsert = "sp_Users_Insert";
-        public static string SP_UserUpdate = "sp_Users_Update";
-        public static string SP_UserDelete = "sp_Users_Delete";
+        public const string SP_UsersList = "[SEC].[SP_Users_List]";
+        public const string SP_UserInsert = "[SEC].[SP_User_Insert]";
+        public const string SP_UserUpdate = "[SEC].[SP_User_Update]";
+        public const string SP_UserDelete = "[SEC].[SP_User_Delete]";
 
         public static string SP_UserRolesList = "sp_UserRoles_List";
         public static string SP_UserRoleInsert = "sp_UserRoles_Insert";
@@ -98,6 +98,7 @@ namespace iAcademicGenerator.DataAccess
         public static string SP_SubjectInsert = "[ACA].[SP_Subject_Insert]";
         public static string SP_SubjectUpdate = "[ACA].[SP_Subject_Update]";
         public static string SP_SubjectDelete = "[ACA].[SP_Subject_Delete]";
+        public static string SP_CareerSubjectsList = "[ACA].[SP_CareerSubjects_List]";
         #endregion
 
         #region Students
@@ -116,6 +117,19 @@ namespace iAcademicGenerator.DataAccess
         #region Requests
         public static string SP_RequestsList = "[PRE].[SP_Requests_List]";
         public static string SP_RequestsInsert = "[PRE].[SP_Requests_Insert]";
+        public const string SP_RequestsStudent_List = "[PRE].[SP_RequestsStudent_List]";
+        #endregion
+
+        #region Schedules
+        public static string SP_SchedulesList = "[ACA].[SP_Schedules_List]";
+        public static string SP_ScheduleInsert = "[ACA].[SP_Schedule_Insert]";
+        public static string SP_ScheduleUpdate = "[ACA].[SP_Schedule_Update]";
+        public static string SP_ScheduleDelete = "[ACA].[SP_Schedule_Delete]";
+        #endregion
+
+
+        #region Offers
+        public static string SP_OfferList = "[ML].[SP_AcademicOffer_List]";
         #endregion
 
 

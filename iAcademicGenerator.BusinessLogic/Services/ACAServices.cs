@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static iAcademicGenerator.DataAccess.Repositories.ACA.RequestsRepository;
 
 namespace iAcademicGenerator.BusinessLogic.Services
 {
@@ -18,10 +19,11 @@ namespace iAcademicGenerator.BusinessLogic.Services
         private readonly SubjectsRepository _subjectsRepository;
         private readonly AreasRepository _areasRepository;
         private readonly RequestsRepository _requestsRepository;
+        private readonly SchedulesRepository _schedulesRepository;
 
         public ACAServices(SectionsRepository sectionsRepository, ClassroomsRepository classroomsRepository,
             TeachersRepository teachersRepository,  
-            SubjectsRepository subjectsRepository, AreasRepository areasRepository, RequestsRepository requestsRepository )
+            SubjectsRepository subjectsRepository, AreasRepository areasRepository, RequestsRepository requestsRepository, SchedulesRepository schedulesRepository )
         {
             _sectionsRepository = sectionsRepository;
             _classroomsRepository = classroomsRepository;
@@ -29,6 +31,7 @@ namespace iAcademicGenerator.BusinessLogic.Services
             _subjectsRepository = subjectsRepository;
             _areasRepository = areasRepository;
             _requestsRepository = requestsRepository;
+            _schedulesRepository = schedulesRepository;
 
         }
 
@@ -298,6 +301,10 @@ namespace iAcademicGenerator.BusinessLogic.Services
         #endregion
 
         #region Subjects
+
+      
+
+
         public ServiceResult ListSubjects()
         {
             var result = new ServiceResult();
@@ -371,6 +378,26 @@ namespace iAcademicGenerator.BusinessLogic.Services
             catch (Exception ex)
             {
                 return result.Error($"Unexpected error during Subject deletion: {ex.Message}");
+            }
+        }
+
+
+
+        public ServiceResult ListCareerSubjects(string est_codigo, string car_codigo)
+        {
+            var result = new ServiceResult();
+
+            if (string.IsNullOrWhiteSpace(est_codigo) || string.IsNullOrWhiteSpace(car_codigo))
+                return result.Error("Student code and career code are required");
+
+            try
+            {
+                var response = _subjectsRepository.CareerSubjectsList(est_codigo, car_codigo);
+                return result.Ok(response);
+            }
+            catch (Exception ex)
+            {
+                return result.Error($"Unexpected error during Career Subjects listing: {ex.Message}");
             }
         }
         #endregion
@@ -488,10 +515,12 @@ namespace iAcademicGenerator.BusinessLogic.Services
                     {
                         return result.Error("Subject code is required for all subjects");
                     }
-                    if (string.IsNullOrWhiteSpace(materia.sec_codigo))
+
+                    if (int.IsNegative(materia.hor_codigo))
                     {
                         return result.Error("Section code is required for all subjects");
                     }
+
                 }
 
                 var response = _requestsRepository.RequestAssignmentInsert(request);
@@ -510,7 +539,99 @@ namespace iAcademicGenerator.BusinessLogic.Services
                 return result.Error($"Unexpected error during Request assignment inserting: {ex.Message}");
             }
         }
+
+        public ServiceResult RequestsStudentList(string est_codigo)
+        {
+            var result = new ServiceResult();
+
+            if (string.IsNullOrWhiteSpace(est_codigo))
+                return result.Error("Student code is required.");
+
+            try
+            {
+                var response = _requestsRepository.List(est_codigo);
+                return result.Ok(response);
+            }
+            catch (Exception ex)
+            {
+                return result.Error($"Error listing student requests: {ex.Message}");
+            }
+        }
+
+
         #endregion
+
+        #region Schedules
+        public ServiceResult ListSchedules()
+        {
+            var result = new ServiceResult();
+            try
+            {
+                var response = _schedulesRepository.List();
+                return result.Ok(response);
+            }
+            catch (Exception ex)
+            {
+                return result.Error(ex.Message);
+            }
+        }
+
+        public ServiceResult ScheduleInsert(SchedulesDTO schedule)
+        {
+            var result = new ServiceResult();
+            try
+            {
+                var response = _schedulesRepository.ScheduleInsert(schedule);
+
+                return response.CodeStatus == 1
+                    ? result.Ok(response)
+                    : result.Error(response);
+            }
+            catch (Exception ex)
+            {
+                return result.Error($"Unexpected error during Schedule insert: {ex.Message}");
+            }
+        }
+
+        public ServiceResult ScheduleUpdate(SchedulesDTO schedule)
+        {
+            var result = new ServiceResult();
+            try
+            {
+                var response = _schedulesRepository.ScheduleUpdate(schedule);
+
+                return response.CodeStatus == 1
+                    ? result.Ok(response)
+                    : result.Error(response);
+            }
+            catch (Exception ex)
+            {
+                return result.Error($"Unexpected error during Schedule update: {ex.Message}");
+            }
+        }
+
+        public ServiceResult ScheduleDelete(int horCodigo)
+        {
+            var result = new ServiceResult();
+
+            if (horCodigo <= 0)
+                return result.Error("Schedule code is required for deletion");
+
+            try
+            {
+                var response = _schedulesRepository.ScheduleDelete(horCodigo);
+
+                return response.CodeStatus == 1
+                    ? result.Ok(response)
+                    : result.Error(response);
+            }
+            catch (Exception ex)
+            {
+                return result.Error($"Unexpected error during Schedule deletion: {ex.Message}");
+            }
+        }
+        #endregion
+
 
     }
 }

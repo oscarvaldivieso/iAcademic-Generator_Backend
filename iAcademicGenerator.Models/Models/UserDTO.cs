@@ -13,8 +13,11 @@ public class UserDTO
     public int active { get; set; }
     public DateTime? create_at { get; set; }
     public DateTime? update_at { get; set; }
-    public string? create_by { get; set; }
-    public string? update_by { get; set; }
-    
-    
+    public string? created_by { get; set; }
+    public string? updated_by { get; set; }
+
+
+    public string? est_codigo { get; set; }
+    public string? doc_codigo { get; set; }
+
 }
